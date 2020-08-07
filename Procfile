@@ -1,0 +1,1 @@
+worker: node got_bot.js
