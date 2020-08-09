@@ -50,6 +50,11 @@ module.exports = {
             chan_questbeyondwall.send(
               "**As you travel through the Haunted Forest, a Wight appears and attacks you!**\n React with 1️⃣ to fight the Wight head on\n React with 2️⃣ to run for cover and get the Wight by surprise\n React with 3️⃣ retreat back to Castle Black fast\n React with 4️⃣ to Quit Quest"
             );
+            setTimeout(function () {
+              console.log("--------quest timeout START entered----------");
+              member.roles.remove("727677376191791105");
+              // chan.send(member.user.username + " took longer than 1 minute to answer the Start/Wight question and was booted from the Quest.");
+            }, 120 * 1000);
             cooldowngivepass.add(message.author.id);
             setTimeout(() => {
               cooldowngivepass.delete(message.author.id);

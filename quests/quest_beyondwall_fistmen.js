@@ -264,7 +264,7 @@ module.exports = {
           member.send("You did not react with the right emoji!");
         }
         setTimeout(function () {
-          console.log("--------quest timeout entered----------");
+          console.log("--------quest timeout FIRST OF MEN entered----------");
           member.roles.remove("728742102275457076");
           // chan.send(member.user.username + " took longer than 1 minute to answer the Giant question and was booted from the Quest.");
         }, 60 * 1000);

@@ -1,5 +1,6 @@
 const Money = require("../models/profile.js");
 const Discord = require("discord.js");
+const helper_functions = require("../helper_functions/rolesremover");
 const wincoins = 30;
 
 module.exports = {
@@ -18,7 +19,7 @@ module.exports = {
     };
     message
       .awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] })
-      .then((collected) => {
+      .then(async (collected) => {
         const reaction = collected.first();
         var chan = message.guild.channels.cache.get("707102776215208008"); //whispers
         // var chan = message.guild.channels.cache.get("714201504583516211"); //test
@@ -162,26 +163,9 @@ module.exports = {
                 break;
             }
           }
-          if (chance == 0 && chance2 == 0) {
-            //remove all roles except everyone and Old Gods and White Walkers and Night King
-            member.roles.cache.forEach((role) => {
-              console.log("each role " + role.name);
-              if (
-                role != "707028782522826782" && //everyone
-                role != "707032148493991947" && //old gods
-                role != "712005922578366494" && //mod
-                role != "730319761908563970" && //mod2
-                role != "707094276458414143" && //lords of westeros
-                role != "732050744466997340" && //direwolf
-                role != "734148371308216332" && //direwolfghost
-                role != "734148516800233502" && //shadowcat
-                role != "739206804310982751" && //amulet
-                role != "741145157885493251" //broadsword
-              ) {
-                member.roles.remove(role).catch(console.error);
-              }
-            });
-            console.log("member " + member);
+          if (chance == 0 || chance2 == 0) {
+            //remove all roles by calling rolesremover
+            await helper_functions.RolesRemover(member);
             member.roles.add("713901799324778587").catch(console.error); //white walker role
             member.roles.remove("727748751522922499"); //remove quest beyond wall role
             member.send(
@@ -287,25 +271,8 @@ module.exports = {
               break;
           }
           if (chance == 0) {
-            //remove all roles except everyone and Old Gods and White Walkers and Night King
-            member.roles.cache.forEach((role) => {
-              console.log("each role " + role.name);
-              if (
-                role != "707028782522826782" && //everyone
-                role != "707032148493991947" && //old gods
-                role != "712005922578366494" && //mod
-                role != "730319761908563970" && //mod2
-                role != "707094276458414143" && //lords of westeros
-                role != "732050744466997340" && //direwolf
-                role != "734148371308216332" && //direwolfghost
-                role != "734148516800233502" && //shadowcat
-                role != "739206804310982751" && //amulet
-                role != "741145157885493251" //broadsword
-              ) {
-                member.roles.remove(role).catch(console.error);
-              }
-            });
-            console.log("member " + member);
+            //remove all roles by calling rolesremover
+            await helper_functions.RolesRemover(member);
             member.roles.add("713901799324778587").catch(console.error); //white walker role
             member.roles.remove("727677376191791105"); //remove quest beyond wall role
             member.send(
@@ -411,25 +378,8 @@ module.exports = {
               break;
           }
           if (chance == 0) {
-            //remove all roles except everyone and Old Gods and White Walkers and Night King
-            member.roles.cache.forEach((role) => {
-              console.log("each role " + role.name);
-              if (
-                role != "707028782522826782" && //everyone
-                role != "707032148493991947" && //old gods
-                role != "712005922578366494" && //mod
-                role != "730319761908563970" && //mod2
-                role != "707094276458414143" && //lords of westeros
-                role != "732050744466997340" && //direwolf
-                role != "734148371308216332" && //direwolfghost
-                role != "734148516800233502" && //shadowcat
-                role != "739206804310982751" && //amulet
-                role != "741145157885493251" //broadsword
-              ) {
-                member.roles.remove(role).catch(console.error);
-              }
-            });
-            console.log("member " + member);
+            //remove all roles by calling rolesremover
+            await helper_functions.RolesRemover(member);
             member.roles.add("713901799324778587").catch(console.error); //white walker role
             member.roles.remove("727677376191791105"); //remove quest beyond wall role
             member.send(

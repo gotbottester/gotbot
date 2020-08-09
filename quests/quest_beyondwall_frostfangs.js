@@ -836,12 +836,12 @@ module.exports = {
           member.send("You did not react with the right emoji!");
         }
         setTimeout(function () {
-          console.log("--------quest timeout entered----------");
+          console.log("--------quest timeout FROSTFANGS entered----------");
           member.roles.remove("728729459263406080");
-          chan.send(
-            member.user.username +
-              " took longer than 1 minute to answer the Thenns question and was booted from the Quest."
-          );
+          // chan.send(
+          //   member.user.username +
+          //     " took longer than 1 minute to answer the Thenns question and was booted from the Quest."
+          // );
         }, 360 * 1000);
       })
       .catch((collected) => {

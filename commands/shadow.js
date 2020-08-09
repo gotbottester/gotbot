@@ -1,5 +1,6 @@
 const Money = require("../models/profile.js");
 const Discord = require("discord.js");
+const helper_functions = require("../helper_functions/rolesremover");
 var cooldownshadow = new Set();
 var cdseconds = 3600;
 
@@ -36,24 +37,22 @@ module.exports = {
             if (money.shadowuse != 0) {
               var chan = message.guild.channels.cache.get("707102776215208008"); //whispers
               let role = message.guild.roles.cache.find(
-                (r) => r.name === "The Dead"
+                (r) => r.id === "708346509367836702"
               );
-              console.log("role " + role);
               let wightrole = member.roles.cache.find(
-                (r) => r.name === "White Walkers"
+                (r) => r.id === "713901799324778587"
               );
               let nightrole = member.roles.cache.find(
-                (r) => r.name === "Night King"
-              );
-              let nightKINGrole = member.roles.cache.find(
-                (r) => r.name === "Night King of Westeros"
+                (r) => r.id === "713895055252783175"
               );
               let kingrole = member.roles.cache.find(
-                (r) => r.name === "King of Westeros"
+                (r) => r.id === "708021014977708033"
               );
-              let Bots = member.roles.cache.find((r) => r.name === "Bots");
               let handrole = member.roles.cache.find(
                 (r) => r.id === "707250754020180079"
+              );
+              let Bots = member.roles.cache.find(
+                (r) => r.id === "715061597944545312"
               );
               let melirole = member.roles.cache.find(
                 (r) => r.id === "713409866764517517"
@@ -72,38 +71,22 @@ module.exports = {
               );
 
               if (
-                !member.roles.cache.has("740747121707450401") //bannerless
+                !member.roles.cache.has("742098398169268304") //limbo
               ) {
                 if (
-                  wightrole != "713901799324778587" && //white walkers
-                  nightrole != "713895055252783175" && //night king
-                  nightKINGrole != "716878672820306003" && //night king of westeros
-                  kingrole != "708021014977708033" && //king
-                  Bots != "715061597944545312" &&
+                  !wightrole &&
+                  !nightrole &&
+                  !kingrole &&
+                  !Bots &&
                   !handrole &&
                   !melirole &&
                   !lordcommanderrole &&
                   !rangerrole &&
-                  !skinchangerrole
+                  !skinchangerrole &&
+                  !essosrole
                 ) {
                   //remove all roles except everyone and Old Gods and White Walkers and Night King
-                  member.roles.cache.forEach((role) => {
-                    console.log("each role " + role.name);
-                    if (
-                      role != "707028782522826782" && //everyone
-                      role != "707032148493991947" && //old gods
-                      role != "712005922578366494" && //mod
-                      role != "730319761908563970" && //mod2
-                      role != "707094276458414143" && //lords of westeros
-                      role != "732050744466997340" && //direwolf
-                      role != "734148371308216332" && //direwolfghost
-                      role != "734148516800233502" && //shadowcat
-                      role != "739206804310982751" && //amulet
-                      role != "741145157885493251" //broadsword
-                    ) {
-                      member.roles.remove(role).catch(console.error);
-                    }
-                  });
+                  helper_functions.RolesRemover(member);
                   member.roles.add(role).catch(console.error);
                   member.roles.add("737165136040689757").catch(console.error); //add shadow marked
                   cooldownshadow.add(message.author.id);
@@ -157,7 +140,7 @@ module.exports = {
                   }, cdseconds * 1000);
                 } else {
                   message.channel.send(
-                    "The Shadow cannot kill the King, Hand of King, Night King, White Walkers, Lord Commander or First Rangers Beyond the Wall."
+                    "The Shadow cannot kill the King, Hand of King, Night King, White Walkers, Lord Commander or First Rangers Beyond the Wall nor Essos Exiles."
                   );
                 }
               } else {

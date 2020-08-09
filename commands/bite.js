@@ -1,8 +1,9 @@
 const Money = require("../models/profile.js");
 const Discord = require("discord.js");
+const helper_functions = require("../helper_functions/rolesremover");
+// const helper_functions = require("../helper_functions/givedeath");
 var cooldownbite = new Set();
-var cdseconds = 7200;
-var chance = 0;
+var cdseconds = 3600;
 
 module.exports = {
   name: "bite",
@@ -13,7 +14,7 @@ module.exports = {
     if (cooldownbite.has(message.author.id)) {
       message.delete();
       console.log("STILL COOLDOWN");
-      return message.reply("There is a 2 hr cooldown on biting.");
+      return message.reply("There is a 1 hr cooldown on biting.");
     }
     console.log("entered bite command");
     //MUST HAVE WHITE WALKER ROLE
@@ -26,24 +27,10 @@ module.exports = {
         );
         return;
       } else {
+        var chance = 0;
         let member1 = message.member;
         let role = message.guild.roles.cache.find(
           (r) => r.name === "White Walkers"
-        );
-        console.log("role " + role);
-        let wightrole = member.roles.cache.find(
-          (r) => r.name === "White Walkers"
-        );
-        let nightrole = member.roles.cache.find((r) => r.name === "Night King");
-        let nightKINGrole = member.roles.cache.find(
-          (r) => r.name === "Night King of Westeros"
-        );
-        let kingrole = member.roles.cache.find(
-          (r) => r.name === "King of Westeros"
-        );
-        let Bots = member.roles.cache.find((r) => r.name === "Bots");
-        let smallrole = member.roles.cache.find(
-          (r) => r.id === "712353382660309033"
         );
         let protectrole = member.roles.cache.find(
           (r) => r.id === "729891478565945436"
@@ -58,31 +45,26 @@ module.exports = {
           //first ranger
           (r) => r.id === "728750595904897106"
         );
-
-        // if (member.user.presence.status !== "offline") {
-
         if (
           nightswatch == "707074053881724989" &&
           !lordcommanderrole &&
           !rangerrole &&
           !protectrole
         ) {
+          cooldownbite.add(message.author.id);
           console.log("entered bite if");
-          let question = Math.floor(Math.random() * 3);
+          let question = Math.floor(Math.random() * 2);
           if (!member.roles.cache.has("724761294246248469")) {
             //not have dragonglass
             if (member.roles.cache.has("719083010091253770")) {
+              //1 in 2 for dagger
               console.log("Night watch has valyrian dagger ");
               console.log("question " + question);
               switch (question) {
                 case 0:
-                case 2:
                   chance = 1;
-                  message.channel.send(
-                    member.user.username +
-                      " used his Valyrian Dagger 🗡 against the White Walker and survived the Bite. The White Walker has been freed from the Night King's spell."
-                  );
                   member1.roles.remove("713901799324778587"); //white walker freed from role
+                  member1.roles.add("742098398169268304").catch(console.error); //add limbo
                   //give kill to member
                   Money.findOne(
                     {
@@ -108,14 +90,10 @@ module.exports = {
             switch (question) {
               case 0:
               case 2:
-              case 1:
-                chance = 1;
-                message.channel.send(
-                  member1.user.username +
-                    " attacked the Nights Watchmen however he had Dragonglass and instantly killed the White Walker. The White Walker is now Dead."
-                );
+                chance = 2;
                 member1.roles.remove("713901799324778587"); //white walker freed from role
-                member1.roles.add("708346509367836702"); //white walker freed from role
+                member1.roles.add("708346509367836702"); //white walker freed from role WTF IS THIS
+                member1.roles.add("742098398169268304").catch(console.error); //add limbo
                 //give kill to member
                 Money.findOne(
                   {
@@ -141,34 +119,45 @@ module.exports = {
                   }
                 );
                 break;
+              case 1:
+                chance = 0; //chance nights watch died so go to next steps to remove roles and kill
+                break;
             }
+          }
+          if (chance == 1) {
+            let embed = new Discord.MessageEmbed()
+              .setTitle(
+                member.user.username +
+                  " used his Valyrian Dagger 🗡 against the White Walker and survived the Bite. The White Walker has been freed from the Night King's spell."
+              )
+              .setDescription(
+                "Nights Watch need Valyrian Daggers or Dragonglass to increase chances on killing White Walkers.\nYou can also buy these items at the Merchant Wagon.\nValyrian Daggers give Nights Watch 1/2 chance of surviving the Bite.\nDragonglass gives the Nights Watch 2/3 chance of surviving the bite."
+              )
+              .setColor("WHITE")
+              .setTimestamp()
+              .attachFiles(["./assets/walkerfreed.png"])
+              .setThumbnail("attachment://walkerfreed.png");
+            chan.send(embed);
+          }
+          if (chance == 2) {
+            let embed = new Discord.MessageEmbed()
+              .setTitle(
+                member.user.username +
+                  " attacked the Nights Watchmen however he had Dragonglass and instantly killed the White Walker. The White Walker is now Dead."
+              )
+              .setDescription(
+                "Nights Watch need Valyrian Daggers or Dragonglass to increase chances on killing White Walkers.\nYou can also buy these items at the Merchant Wagon.\nValyrian Daggers give Nights Watch 1/2 chance of surviving the Bite.\nDragonglass gives the Nights Watch 2/3 chance of surviving the bite."
+              )
+              .setColor("WHITE")
+              .setTimestamp()
+              .attachFiles(["./assets/walkerkilled.png"])
+              .setThumbnail("attachment://walkerkilled.png");
+            chan.send(embed);
           }
           if (chance == 0) {
             //remove all roles except everyone and Old Gods and White Walkers and Night King
-            member.roles.cache.forEach((role) => {
-              console.log("each role " + role.name);
-              if (
-                role != "707028782522826782" && //everyone
-                role != "707032148493991947" && //old gods
-                role != "712005922578366494" && //mod
-                role != "730319761908563970" && //mod2
-                role != "707094276458414143" && //lords of westeros
-                role != "732050744466997340" && //direwolf
-                role != "734148371308216332" && //direwolfghost
-                role != "734148516800233502" && //shadowcat
-                role != "708346509367836702" //amulet
-              ) {
-                member.roles.remove(role).catch(console.error);
-              }
-            });
-            console.log("member " + member);
+            helper_functions.RolesRemover(member);
             member.roles.add(role).catch(console.error);
-            cooldownbite.add(message.author.id);
-            console.log("you gave " + member + " role " + role);
-            message.channel.send(
-              member.user.username +
-                " was bitten by a White Walker at the Wall and turned into a White Walker! ☠"
-            );
             member.send(
               "A White Walker bit you and you turned into a White Walker."
             );
@@ -178,7 +167,7 @@ module.exports = {
                   " was bitten by a White Walker at the Wall and turned into a White Walker!"
               )
               .setDescription(
-                "Nights Watch need Valyrian Daggers to increase chances on killing White Walkers. You can also buy Dragon Glass in the ^store."
+                "Nights Watch need Valyrian Daggers or Dragonglass to increase chances on killing White Walkers.\nYou can also buy these items at the Merchant Wagon.\nValyrian Daggers give Nights Watch 1/2 chance of surviving the Bite.\nDragonglass gives the Nights Watch 2/3 chance of surviving the bite."
               )
               .setColor("WHITE")
               .setTimestamp()
@@ -222,9 +211,6 @@ module.exports = {
             "White Walkers can only bite regular Nights Watch and Rangers (Not First Rangers or Lord Commander)."
           );
         }
-        // } else {
-        //   message.channel.send("User must be online.");
-        // }
       }
     } else {
       console.log("you do not have permission!!!");

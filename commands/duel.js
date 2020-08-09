@@ -5,7 +5,7 @@ var member1bonus = 0;
 var mentionbonus = 0;
 var winratio;
 var fixedwinratio;
-var cooldown = new Set();
+var cooldownduel = new Set();
 var cdseconds = 600;
 
 module.exports = {
@@ -13,12 +13,10 @@ module.exports = {
   description: "says duel!",
   execute(message, args) {
     //duel - Duel
-    if (cooldown.has(message.author.id)) {
+    if (cooldownduel.has(message.author.id)) {
       message.delete();
-      console.log("STILL COOLDOWN");
-      return message.reply(
-        "There is a 10 minute cooldown Duels."
-      );
+      console.log("STILL cooldownduel");
+      return message.reply("There is a 10 minute cooldownduel Duels.");
     }
     var chan = message.guild.channels.cache.get("707102776215208008"); //whispers
     console.log("entered duel command");
@@ -37,7 +35,8 @@ module.exports = {
         member1.roles.cache.has("713895055252783175") ||
         member1.roles.cache.has("716878672820306003") ||
         member1.roles.cache.has("708021014977708033") ||
-        member1.roles.cache.has("722932439743463524")
+        member1.roles.cache.has("722932439743463524") ||
+        member1.roles.cache.has("742098398169268304")
       ) {
         //dead, white walker, night king, night king of westeros, king, black cell 722932439743463524
         message.reply("Only the living (and Not King) can use ^duel");
@@ -49,7 +48,8 @@ module.exports = {
         member2.roles.cache.has("716878672820306003") ||
         member2.roles.cache.has("708021014977708033") ||
         member2.roles.cache.has("722932439743463524") ||
-        member2.roles.cache.has("740747121707450401")
+        member2.roles.cache.has("740747121707450401") ||
+        member1.roles.cache.has("742098398169268304")
       ) {
         //dead
         message.reply(
@@ -82,7 +82,7 @@ module.exports = {
           .then((collected1) => {
             const reaction = collected1.first();
             if (reaction.emoji.name === "👍") {
-              cooldown.add(message.author.id);
+              cooldownduel.add(message.author.id);
               message.reply(member2.user.username + " Accepted Duel Challenge");
               var member1CombatScore = Math.random();
               var member2CombatScore = Math.random();
@@ -286,6 +286,13 @@ module.exports = {
                     money.save().catch((err) => console.log(err));
                   }
                 );
+                setTimeout(() => {
+                  cooldownduel.delete(message.author.id);
+                  console.log("Cooldown duel finished " + message.author.id);
+                  message.author.send(
+                    "Duel cooldown ended. You may duel anytime."
+                  );
+                }, cdseconds * 1000);
               } else {
                 console.log(
                   "member 2 wins battle " +
@@ -369,8 +376,8 @@ module.exports = {
                   }
                 );
                 setTimeout(() => {
-                  cooldown.delete(message.author.id);
-                  console.log("Cooldown give pass finished " + message.author.id);
+                  cooldownduel.delete(message.author.id);
+                  console.log("Cooldown duel finished " + message.author.id);
                   message.author.send(
                     "Duel cooldown ended. You may duel anytime."
                   );

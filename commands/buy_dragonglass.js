@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const Money = require("../models/profile.js");
-var costtobuy = 50;
+var costtobuy = 30;
 
 module.exports = {
   name: "buy_dragonglass",

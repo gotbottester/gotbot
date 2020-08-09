@@ -16,7 +16,7 @@ module.exports = {
       var deserters = [];
       //find all deserters and list out
       message.guild.members.cache.each((membs) => {
-        if (membs.roles.cache.has("715781455560573001")) {
+        if (membs.roles.cache.has("715781455560573001") && !membs.roles.cache.has("713901799324778587")) {
             console.log("found deserter");
           deserters.push(membs.user.username);
         }
@@ -25,7 +25,7 @@ module.exports = {
       let embed = new Discord.MessageEmbed().setTitle(
         "List of Deserters"
       );
-      embed.setDescription("Deserters can be sentenced to death with ^sentence, unless they are Hand, Small Council, or Kingsguard.")
+      embed.setDescription("Deserters can be sentenced to death with ^sentence, unless they are Hand, Small Council, or Kingsguard or fleed to Essos.")
       if (deserters.length == 0) {
         embed.setColor("RED");
         embed.addField("No Deserters Found");

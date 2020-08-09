@@ -36,20 +36,24 @@ module.exports = {
           (r) => r.id === "722932439743463524"
         ); //black cell
         let membersWithRole = role.members;
-        console.log("role " + role);
         let wightrole = member.roles.cache.find(
-          (r) => r.name === "White Walkers"
+          (r) => r.id === "713901799324778587"
         );
-        let nightrole = member.roles.cache.find((r) => r.name === "Night King");
+        let nightrole = member.roles.cache.find(
+          (r) => r.id === "713895055252783175"
+        );
         let essosrole = member.roles.cache.find(
-          (r) => r.name === "Essos Exile"
+          (r) => r.id === "714598666857349132"
         );
         let nightswatch = member.roles.cache.find(
-          (r) => r.name === "NightsWatch"
+          (r) => r.id === "707074053881724989"
         );
-        let deadrole = member.roles.cache.find((r) => r.name === "The Dead");
-        let Bots = member.roles.cache.find((r) => r.name === "Bots");
-        // Bots != "715061597944545312"
+        let deadrole = member.roles.cache.find(
+          (r) => r.id === "708346509367836702"
+        );
+        let Bots = member.roles.cache.find(
+          (r) => r.id === "715061597944545312"
+        );
         let smallrole = member.roles.cache.find(
           (r) => r.id === "712353382660309033"
         );
@@ -57,10 +61,10 @@ module.exports = {
           (r) => r.id === "713409866764517517"
         );
         let kingrole = member.roles.cache.find(
-          (r) => r.name === "King of Westeros"
+          (r) => r.id === "708021014977708033"
         );
         let handrole = member.roles.cache.find(
-          (r) => r.name === "Hand of the King"
+          (r) => r.id === "707250754020180079"
         );
         let oldgodrole = member.roles.cache.find(
           (r) => r.id === "707032148493991947"
@@ -68,63 +72,22 @@ module.exports = {
         let skinchangerrole = member.roles.cache.find(
           (r) => r.id === "729182524185509929"
         );
-        let obsidian = member.roles.cache.find(
-          (r) => r.id === "729097195722244176"
-        );
-        let weirwoodbow = member.roles.cache.find(
-          (r) => r.id === "729097281370062881"
-        );
-        let greensight = member.roles.cache.find(
-          (r) => r.id === "729097386982375435"
-        );
-        let skinchanger = member.roles.cache.find(
-          (r) => r.id === "729097440082526279"
-        );
-        let ironcoin = member.roles.cache.find(
-          (r) => r.id === "726588449263583339"
-        );
-        let dagger = member.roles.cache.find(
-          (r) => r.id === "719083010091253770"
-        );
-        let armor = member.roles.cache.find(
-          (r) => r.id === "726663217950097458"
-        );
-        let dragonglass = member.roles.cache.find(
-          (r) => r.id === "724761294246248469"
-        );
-        let direwolf = member.roles.cache.find(
-          (r) => r.id === "732050744466997340"
-        );
-        let direwolfghost = member.roles.cache.find(
-          (r) => r.id === "734148371308216332"
-        );
-        let shadowcat = member.roles.cache.find(
-          (r) => r.id === "734148516800233502"
-        );
-        let oldtongue = member.roles.cache.find(
-          (r) => r.id === "734267092924104735"
-        );
-        let wargtrained = member.roles.cache.find(
-          (r) => r.id === "734150773327396886"
-        );
 
         console.log("black cell size " + membersWithRole.size);
         if (!member.roles.cache.has("722932439743463524")) {
-          if (!member.roles.cache.has("740747121707450401")) {
-            // if (!member.roles.has("726618751797166145")) {
-            //   //braavos traveler quest
+          if (!member.roles.cache.has("742098398169268304")) {
             if (membersWithRole.size < 2) {
               if (
-                wightrole != "713901799324778587" && //white walkers
-                nightrole != "713895055252783175" && //night king
-                essosrole != "714598666857349132" && //essos
-                nightswatch != "707074053881724989" && //nightswatch
-                deadrole != "708346509367836702" && //the dead
-                Bots != "715061597944545312" && //bots
+                !wightrole &&
+                !nightrole &&
+                !essosrole &&
+                !nightswatch &&
+                !deadrole &&
+                !Bots &&
                 !smallrole &&
-                !melirole && //small council or melisandre
-                kingrole != "708021014977708033" && //king
-                handrole != "707250754020180079" && //hand
+                !melirole &&
+                !kingrole &&
+                !handrole &&
                 !oldgodrole &&
                 !skinchangerrole
               ) {
@@ -134,19 +97,17 @@ module.exports = {
                   if (
                     role != "707028782522826782" && //everyone
                     role != "707032148493991947" && //old gods
-                    !dragonglass &&
-                    !armor &&
-                    !dagger &&
-                    !ironcoin &&
-                    !greensight &&
-                    !skinchanger &&
-                    !weirwoodbow &&
-                    !obsidian &&
-                    !direwolf &&
-                    !direwolfghost &&
-                    !shadowcat &&
-                    !oldtongue &&
-                    !wargtrained &&
+                    role != "724761294246248469" && //dragonglass
+                    role != "726588449263583339" && //iron coin
+                    role != "729097386982375435" && //greensight
+                    role != "729097440082526279" && //skinchanger
+                    role != "729097281370062881" && //weirwoodbow
+                    role != "729097195722244176" && //obsidian lance
+                    role != "732050744466997340" && //direwolf
+                    role != "734148371308216332" && //direwolf ghost
+                    role != "734148516800233502" && //shadowcat
+                    role != "734267092924104735" && //oldtongue
+                    role != "734150773327396886" && //wargtrained
                     role != "739206804310982751" && //amulet
                     role != "741145157885493251" //broadsword
                   ) {
@@ -158,10 +119,8 @@ module.exports = {
                   "707102776215208008"
                 ); //whispers
                 //add Black Cell role
-                console.log("member " + member);
                 member.roles.add(role).catch(console.error);
                 cooldownjail.add(message.author.id);
-                console.log("you gave " + member + " role " + role);
                 message.channel.send(
                   "The King or Hand of King has sent " +
                     member.user.username +
@@ -195,11 +154,6 @@ module.exports = {
             } else {
               message.channel.send("The Black Cell is at Max Capacity.");
             }
-            // } else {
-            //   message.channel.send(
-            //     "User is on a Quest, cannot be killed during Quest."
-            //   );
-            // }
           } else {
             message.channel.send("User cannot be Bannerless.");
           }

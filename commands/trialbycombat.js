@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const Money = require("../models/profile.js");
+const helper_functions = require("../helper_functions/rolesremover");
 const trialcoins = 30;
 
 module.exports = {
@@ -61,8 +62,10 @@ module.exports = {
           .setAuthor(
             `${member1.user.username} has challenged ${member2.user.username} to a Trial by Combat!`
           )
-          .setDescription("Challenge a member to Trial by Combat using the command ^trialbycombat in the Combat Channel only.\nAnyone can be killed that is living and not a Red Priestess - 30 coins for Winner, Death for Loser.\nYou will also loot 20-50 coins randomly from the slain user.");
-          chan.send(embed1);
+          .setDescription(
+            "Challenge a member to Trial by Combat using the command ^trialbycombat in the Combat Channel only.\nAnyone can be killed that is living and not a Red Priestess - 30 coins for Winner, Death for Loser.\nYou will also loot 20-50 coins randomly from the slain user."
+          );
+        chan.send(embed1);
         message.mentions.members
           .first()
           .send(
@@ -114,23 +117,8 @@ module.exports = {
                   );
                   console.log("winner: " + member1.user.username);
                   //remove all roles except everyone and Old Gods
-                  member2.roles.cache.forEach((role) => {
-                    console.log("each role " + role.name);
-                    if (
-                      role != "707028782522826782" && //everyone
-                      role != "707032148493991947" && //old gods
-                      role != "712005922578366494" && //mod
-                      role != "730319761908563970" && //mod2
-                      role != "707094276458414143" && //lords of westeros
-                      role != "732050744466997340" && //direwolf
-                      role != "734148371308216332" && //direwolfghost
-                      role != "734148516800233502" && //shadowcat
-                      role != "739206804310982751" && //amulet
-                      role != "741145157885493251" //broadsword
-                    ) {
-                      member2.roles.remove(role).catch(console.error); //
-                    }
-                  });
+                  //remove all roles except everyone and Old Gods and White Walkers and Night King
+                  helper_functions.RolesRemover(member2);
                   //add The Dead role
                   member2.roles.add(deadrole).catch(console.error);
                   //win Coins
@@ -210,22 +198,7 @@ module.exports = {
                   );
                   console.log("winner: " + member2.user.username);
                   //remove all roles except everyone and Old Gods
-                  member1.roles.cache.forEach((role) => {
-                    console.log("each role " + role.name);
-                    if (
-                      role != "707028782522826782" && //everyone
-                      role != "707032148493991947" && //old gods
-                      role != "712005922578366494" && //mod
-                      role != "730319761908563970" && //mod2
-                      role != "707094276458414143" && //lords of westeros
-                      role != "732050744466997340" && //direwolf
-                      role != "734148371308216332" && //direwolfghost
-                      role != "734148516800233502" && //shadowcat
-                      role != "739206804310982751" //amulet
-                    ) {
-                      member1.roles.remove(role).catch(console.error);
-                    }
-                  });
+                  helper_functions.RolesRemover(member1);
                   //add The Dead role
                   member1.roles.add(deadrole).catch(console.error);
                   //win coins

@@ -170,7 +170,7 @@ module.exports = {
                     chan_questbeyond.send(
                       "**Enter the Cave by reacting with 👍**"
                     );
-                  }, 15 * 1000);
+                  }, 20 * 1000);
                   break;
                 case 1:
                   message.channel.send(
@@ -347,7 +347,7 @@ module.exports = {
           member.send("You did not react with the right emoji!");
         }
         setTimeout(function () {
-          console.log("--------quest timeout entered----------");
+          console.log("--------quest timeout POWERFUL WHITE WALKER entered----------");
           member.roles.remove("728742102275457076");
           // chan.send(member.user.username + " took longer than 1 minute to answer the Powerfull White question and was booted from the Quest.");
         }, 60 * 1000);

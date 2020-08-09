@@ -364,7 +364,7 @@ module.exports = {
           }
         }
         setTimeout(function () {
-          console.log("--------quest timeout entered----------");
+          console.log("--------quest timeout CAVE entered----------");
           member.roles.remove("728742102275457076");
           // chan.send(member.user.username + " took longer than 5 minute to answer the Cave question and was booted from the Quest.");
         }, 360 * 1000);

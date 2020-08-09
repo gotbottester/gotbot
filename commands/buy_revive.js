@@ -36,6 +36,7 @@ module.exports = {
             member.roles.remove(deadrole).catch(console.error);
             member.roles.remove(deserterrole).catch(console.error);
             member.roles.remove("737165136040689757").catch(console.error); //remove shadowmarked
+            member.roles.add("742098398169268304").catch(console.error); //add limbo
             money.coins = money.coins - costtorevive;
             money.save().catch((err) => console.log(err));
             message.channel.send(

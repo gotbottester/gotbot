@@ -13,6 +13,8 @@ const Money = require("./models/profile.js");
 const mongoose = require("mongoose");
 const pardon = require("./commands/pardon");
 const questdagger = require("./quests/questdagger");
+mongoose.connect(
+);
 //used to give King 100 coins on auto feature promoting new king
 const kingcoins = 100;
 
@@ -266,6 +268,14 @@ client.on("ready", () => {
         console.log("not time");
       }
     }, 3600 * 1000);
+        //--------------------------------------------
+    // MARKER QUEST TEST
+    //--------------------------------------------
+    // setInterval(function () {
+    //   channel_T.send(
+    //     "Quest for TEST. (First person to react to this message with 👍 within 30 seconds gets the Quest)"
+    //   );
+    // }, 10 * 1000);
     //--------------------------------------------
     // BLACK CELL QUEST
     //--------------------------------------------
@@ -493,6 +503,7 @@ client.on("ready", () => {
                 "Cannot be Dead or in Essos to trade with the Wandering Merchant!"
               );
             } else {
+              channel_w.send(membertest.user.username + " was the First to enter the creepy Merchant Wagon.");
               return ["👍"].includes(reaction.emoji.name);
             }
           };
@@ -541,6 +552,7 @@ client.on("ready", () => {
             } else if (membertest.roles.cache.has("726588449263583339")) {
               membertest.send("Already have an Iron Coin!");
             } else {
+              channel_w.send(membertest.user.username + " was the First to answer Jaqen's call.");
               return ["👍"].includes(reaction.emoji.name);
             }
           };
@@ -589,6 +601,7 @@ client.on("ready", () => {
             } else if (membertest.roles.cache.has("719083010091253770")) {
               membertest.send("Already have Valyrian Dagger!");
             } else {
+              channel_w.send(membertest.user.username + " was the First to accepted the Valyrian Dagger Quest.");
               return ["👍"].includes(reaction.emoji.name);
             }
           };
@@ -608,7 +621,6 @@ client.on("ready", () => {
 // CLIENT ON GUILD MEMBER JOINS / CREATE MONGO DB PROFILE
 //-------------------------------------------------------------------------
 client.on("guildMemberAdd", (guildMemberAdd) => {
-  guildMemberAdd.roles.add("736382370592325643");
   guildMemberAdd.roles.add("740747121707450401"); //bannerless
   console.log("Guild Member joined");
   Money.findOne(
@@ -696,9 +708,9 @@ client.on("message", (message) => {
     case "pet_wolf":
       client.commands.get("pet_wolf").execute(message, args);
       break;
-    // case "inventory":
-    //   client.commands.get("inventory").execute(message, args);
-    //   break;
+    case "inventory":
+      client.commands.get("inventory").execute(message, args);
+      break;
     case "questroles":
       client.commands.get("questroles").execute(message, args);
       break;
@@ -867,9 +879,9 @@ client.on("message", (message) => {
     case "buy_dragonglass":
       client.commands.get("buy_dragonglass").execute(message, args);
       break;
-    case "dragonglass":
-      client.commands.get("dragonglass").execute(message, args);
-      break;
+    // case "dragonglass":
+    //   client.commands.get("dragonglass").execute(message, args);
+    //   break;
   }
 });
 //////---------------------END OF CLIENT READY----------------------
@@ -911,21 +923,37 @@ client.on("guildMemberUpdate", function (oldMember, newMember) {
       newMember.roles.cache.has("714598666857349132")) //essos
   ) {
     //bannerless
-    newMember.roles.remove("740747121707450401");
+    newMember.roles.remove("740747121707450401"); //newcomer
+    newMember.roles.remove("742098398169268304"); //limbo
   }
   //-------------------------------------------------------------------------
   // add hidden roles
   //-------------------------------------------------------------------------
-  if (!newMember.roles.cache.has("736382370592325643")) {
-    //weapons
+  if (
+    !newMember.roles.cache.has("736382370592325643") &&
+    !newMember.roles.cache.has("740747121707450401") &&
+    !newMember.roles.cache.has("741497047638736940") &&
+    !newMember.roles.cache.has("742098398169268304")
+  ) {
+    //not have weapons && not have bannerless or limbo
     newMember.roles.add("736382370592325643");
   }
-  if (!newMember.roles.cache.has("737819480935366687")) {
-    //pets
+  if (
+    !newMember.roles.cache.has("737819480935366687") &&
+    !newMember.roles.cache.has("740747121707450401") &&
+    !newMember.roles.cache.has("741497047638736940") &&
+    !newMember.roles.cache.has("742098398169268304")
+  ) {
+    //not pets && not have bannerless or limbo
     newMember.roles.add("737819480935366687");
   }
-  if (!newMember.roles.cache.has("738598180509450302")) {
-    //quest items
+  if (
+    !newMember.roles.cache.has("738598180509450302") &&
+    !newMember.roles.cache.has("740747121707450401") &&
+    !newMember.roles.cache.has("741497047638736940") &&
+    !newMember.roles.cache.has("742098398169268304")
+  ) {
+    //not quest items && not have bannerless or limbo
     newMember.roles.add("738598180509450302");
   }
 
@@ -960,7 +988,7 @@ client.on("guildMemberUpdate", function (oldMember, newMember) {
   // When a user changes from NightsWatch to something else announce it (DESERTER)
   //-------------------------------------------------------------------------
   const messagechanneldeserter = oldMember.guild.channels.cache.find(
-    (r) => r.id === "715793558933864538"
+    (r) => r.id === "707102776215208008"
   );
 
   const firstRole = oldMember.guild.roles.cache.find(
@@ -972,39 +1000,68 @@ client.on("guildMemberUpdate", function (oldMember, newMember) {
   const thirdRole = newMember.guild.roles.cache.find(
     (r) => r.name == "Deserter"
   );
+  const dead = newMember.guild.roles.cache.find((r) => r.name == "The Dead");
+  const whitewalker = newMember.guild.roles.cache.find(
+    (r) => r.name == "White Walkers"
+  );
   const pardonrole = "726124627440435261";
   const deserterrole = "715781455560573001";
   const ranger = "727748751522922499";
   const firstranger = "728750595904897106";
 
+  //-------------------------------------------------------------------------
+  // Remove deserter if dead or white walker
+  //-------------------------------------------------------------------------
+
+  if (
+    newMember.roles.cache.has(dead.id) ||
+    newMember.roles.cache.has(whitewalker.id)
+  ) {
+    if (newMember.roles.cache.has(thirdRole.id)) {
+      newMember.roles.remove(thirdRole.id); //loses deserter
+    }
+  }
+  //-------------------------------------------------------------------------
+  // add deserter if leaves nights watch
+  //-------------------------------------------------------------------------
+
   if (!oldMember.roles.cache.has(pardonrole)) {
-    console.log("did NOT find pardon role");
     if (
       oldMember.roles.cache.has(firstRole.id) &&
       !newMember.roles.cache.has(secondRole.id)
     ) {
-      newMember.roles.add(thirdRole.id); //gains deserter
-      newMember.roles.remove(ranger); //loses ranger
-      newMember.roles.remove(firstranger); //losers first ranger
-      const embed = new Discord.MessageEmbed()
-        .setColor("RED")
-        .setTimestamp()
-        .attachFiles(["./assets/nights_watch.png"])
-        .setThumbnail("attachment://nights_watch.png")
-        .setAuthor(
-          `${oldMember.user.username}` +
-            " has Deserted the NightsWatch! He can now be executed by the Lord Commander."
-        );
-      messagechanneldeserter.send({
-        embed,
-      });
+      setTimeout(function () {
+        if (
+          !newMember.roles.cache.has(dead.id) ||
+          !newMember.roles.cache.has(whitewalker.id)
+        ) {
+          newMember.roles.add(thirdRole.id); //gains deserter
+          newMember.roles.remove(ranger); //loses ranger
+          newMember.roles.remove(firstranger); //losers first ranger
+          console.log("user is dead, not a deserter");
+        }
+      }, 10 * 1000);
+
+      // const embed = new Discord.MessageEmbed()
+      //   .setColor("BLACK")
+      //   .setTimestamp()
+      //   .attachFiles(["./assets/deserter.png"])
+      //   .setThumbnail("attachment://deserter.png")
+      //   .setAuthor(
+      //     `${oldMember.user.username}` +
+      //       " has Deserted the NightsWatch! He can now be executed by the Lord Commander."
+      //   )
+      //   .setDescription("If a First Ranger or Ranger desert the Nights Watch, they lose that role. The only safe places for Deserters are if they are protected by the King in the Small Council or Essos.")
+      // messagechanneldeserter.send({
+      //   embed,
+      // });
     }
   } else {
     console.log("found pardon role do nothing");
   }
 
   //-------------------------------------------------------------------------
-  // When a user changes joins nights watch remove Pardon role and Deserters role if exists
+  // When a user joins nights watch remove Pardon role and Deserters role if exists
   //-------------------------------------------------------------------------
   if (oldMember.roles.cache.has(pardonrole)) {
     console.log("FOUND pardon role");
@@ -1279,23 +1336,23 @@ client.on("message", (receivedMessage) => {
   }
   //Quest for TEST. (First person to react to this message with 👍 within 30 seconds gets the Quest)
   //QUEST TEST
-  if (
-    receivedMessage.author == client.user &&
-    receivedMessage.content ==
-      "Quest for TEST. (First person to react to this message with 👍 within 30 seconds gets the Quest)"
-  ) {
-    let args = receivedMessage.content;
-    client.quests.get("quest_test").execute(receivedMessage, args);
-  }
-  //TEST:\n React with 1️⃣ \n React with 2️⃣ \n React with 3️⃣
-  if (
-    receivedMessage.author == client.user &&
-    receivedMessage.content ==
-      "TEST:\n React with 1️⃣ \n React with 2️⃣ \n React with 3️⃣"
-  ) {
-    let args = receivedMessage.content;
-    client.quests.get("quest_test1").execute(receivedMessage, args);
-  }
+  // if (
+  //   receivedMessage.author == client.user &&
+  //   receivedMessage.content ==
+  //     "Quest for TEST. (First person to react to this message with 👍 within 30 seconds gets the Quest)"
+  // ) {
+  //   let args = receivedMessage.content;
+  //   client.quests.get("quest_test").execute(receivedMessage, args);
+  // }
+  // //TEST:\n React with 1️⃣ \n React with 2️⃣ \n React with 3️⃣
+  // if (
+  //   receivedMessage.author == client.user &&
+  //   receivedMessage.content ==
+  //     "TEST:\n React with 1️⃣ \n React with 2️⃣ \n React with 3️⃣"
+  // ) {
+  //   let args = receivedMessage.content;
+  //   client.quests.get("quest_test1").execute(receivedMessage, args);
+  // }
   //QUEST IRON COIN
   if (
     receivedMessage.author == client.user &&
@@ -2000,19 +2057,9 @@ client.on("message", (receivedMessage) => {
         guild.members.cache.each((membs) => {
           if (membs.roles.cache.has("713901799324778587")) {
             //white walkers
-            // console.log("MEMBS white walker " + membs.user.username);
             membs.roles.cache.forEach((role) => {
-              // console.log("each role " + role.name);
-              if (
-                role != "707028782522826782" && //everyone
-                role != "707032148493991947" && //old gods
-                role != "712005922578366494" && //mod
-                role != "713895055252783175" && //night king
-                role != "716878672820306003" //night king of westeros
-              ) {
                 console.log("MEMBS REMOVED white walkers " + role.name);
                 membs.roles.remove(role).catch(console.error); // REMOVE WHITE WALKER ROLE
-              }
             });
           }
         });
@@ -2684,43 +2731,43 @@ client.on("message", (receivedMessage) => {
       .addFields(
         {
           name: "Access Store to Buy Items",
-          value: "^store",
+          value: "`^store`",
         },
-        // {
-        //   name: "Access your Inventory",
-        //   value: "^inventory",
-        // },
+        {
+          name: "Access your Inventory",
+          value: "`^inventory`",
+        },
         {
           name: "Available Quests Information",
-          value: "^quests",
+          value: "`^quests`",
         },
         {
           name: "Quest Achievable Roles",
-          value: "^questroles",
+          value: "`^questroles`",
         },
         {
           name: "Help with Leaderboards",
-          value: "^counthelp",
+          value: "`^counthelp`",
         },
         {
           name: "Help with Coin System",
-          value: "^coinhelp",
+          value: "`^coinhelp`",
         },
         {
           name: "Special Role Commands",
-          value: "^rolehelp",
+          value: "`^rolehelp`",
         },
         {
           name: "See All Role Commands",
-          value: "^rolehelpall",
+          value: "`^rolehelpall`",
         },
         {
           name: "Combat Commands",
-          value: "^combathelp",
+          value: "`^combathelp`",
         },
         {
           name: "Show Your Stats",
-          value: "^flex",
+          value: "`^flex`",
         }
       );
     receivedMessage.channel.send(embed);
@@ -3534,5 +3581,4 @@ client.on("message", (receivedMessage) => {
     console.log("entered banner role call lannister");
   }
 });
-
 

@@ -25,44 +25,47 @@ module.exports = {
         let Bots = member.roles.cache.find((r) => r.name === "Bots");
 
         if (Bots != "715061597944545312") {
-          console.log("member " + member);
-          member.roles.add(role).catch(console.error); //give dagger to mentioned member
-          message.member.roles.remove(role).catch(console.error); //remove dagger from self
-          console.log("you gave " + member + " role " + role);
-          message.channel.send(
-            message.member.user.username +
-              " has given his Valyrian Dagger to " +
-              member.user.username
-          );
-          //mentioned
-          Money.findOne(
-            {
-              userID: member.id,
-              guildID: member.guild.id,
-            },
-            (err, money) => {
-              if (err) console.log(err);
-              money.items.push("Valyrian Dagger");
-              money.save().catch((err) => console.log(err));
-            }
-          );
-          //author
-          Money.findOne(
-            {
-              userID: message.member.id,
-              guildID: message.guild.id,
-            },
-            (err, money) => {
-              if (err) console.log(err);
-              money.items.pull("Valyrian Dagger");
-              money.save().catch((err) => console.log(err));
-            }
-          );
+          if (!member.roles.cache.has("719083010091253770")) {
+            console.log("member " + member);
+            member.roles.add(role).catch(console.error); //give dagger to mentioned member
+            message.member.roles.remove(role).catch(console.error); //remove dagger from self
+            console.log("you gave " + member + " role " + role);
+            message.channel.send(
+              message.member.user.username +
+                " has given his Valyrian Dagger to " +
+                member.user.username
+            );
+            //mentioned
+            Money.findOne(
+              {
+                userID: member.id,
+                guildID: member.guild.id,
+              },
+              (err, money) => {
+                if (err) console.log(err);
+                money.items.push("Valyrian Dagger");
+                money.save().catch((err) => console.log(err));
+              }
+            );
+            //author
+            Money.findOne(
+              {
+                userID: message.member.id,
+                guildID: message.guild.id,
+              },
+              (err, money) => {
+                if (err) console.log(err);
+                money.items.pull("Valyrian Dagger");
+                money.save().catch((err) => console.log(err));
+              }
+            );
+          } else {
+            message.channel.send("That member already has a Valyrian Dagger!");
+          }
+        } else {
+          message.channel.send("You must have a Valyrian Dagger to give!");
         }
       }
-    } else {
-      console.log("You must have a Valyrian Dagger to give!");
-      message.channel.send("You must have a Valyrian Dagger to give!");
     }
   },
 };

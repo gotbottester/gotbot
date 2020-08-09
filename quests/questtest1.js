@@ -3,6 +3,8 @@
 const Money = require("../models/profile.js");
 const Discord = require("discord.js");
 const { collection } = require("../models/profile.js");
+const helper_functions = require("../helper_functions/rolesremover");
+
 
 module.exports = {
   name: "quest_test1",
@@ -19,12 +21,13 @@ module.exports = {
     message
       .awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] })
       
-
-      .then((collected) => {
+      .then(async (collected) => {
         const reaction = collected.first();
         if (reaction.emoji.name === "1️⃣") {
+          await helper_functions.RolesRemover(member);
+          await helper_functions.givekill(member);
           message.reply(member.user.username + " reacted with 1️⃣");
-          console.log("REACTED CORRECTLY");
+          console.log("HELPER FINISHED");
           // message.delete({ timeout: 10000 });
           member.roles.remove("726237877423439882");
         } else if (reaction.emoji.name === "2️⃣") {

@@ -62,9 +62,7 @@ module.exports = {
           (r) => r.id === "713409866764517517"
         );
 
-        if (!member.roles.cache.has("740747121707450401")) {
-          // if (!member.roles.has("726618751797166145")) {
-          //   //braavos traveler quest
+        if (!member.roles.cache.has("742098398169268304")) { //limbo
             if (
               wightrole != "713901799324778587" && //white walkers
               nightrole != "713895055252783175" && //night king
@@ -116,10 +114,6 @@ module.exports = {
               );
             }
           // } else {
-          //   message.channel.send(
-          //     "User is on a Quest, cannot be killed during Quest."
-          //   );
-          // }
         } else {
           message.channel.send("User cannot be Bannerless.");
         }

@@ -1,5 +1,6 @@
 var cooldownrevive = new Set();
 const Discord = require("discord.js");
+const helper_functions = require("../helper_functions/rolesremover");
 var cdseconds = 3600;
 
 module.exports = {
@@ -36,29 +37,10 @@ module.exports = {
 
         if (deadrole == "708346509367836702") {
           //remove all roles except everyone and Old Gods and White Walkers and Night King
-          member.roles.cache.forEach((role) => {
-            console.log("each role " + role.name);
-            if (
-              role != "707028782522826782" && //everyone
-              role != "707032148493991947" && //old gods
-              role != "712005922578366494" && //mod
-              role != "730319761908563970" && //mod2
-              role != "707094276458414143" && //lords of westeros
-              role != "732050744466997340" && //direwolf
-              role != "734148371308216332" && //direwolfghost
-              role != "734148516800233502" && //shadowcat
-              role != "739206804310982751" //amulet
-            ) {
-              member.roles.remove(role).catch(console.error);
-            }
-          });
-
-          console.log("member " + member);
+          //remove all roles
+          helper_functions.RolesRemover(member);
           member.roles.remove(role).catch(console.error);
-          console.log("you removed " + member + " role " + role);
-          // message.channel.send(
-          //   "The Red Witch has revived " + member.user.username + "! 🖤 "
-          // );
+          member.roles.add("742098398169268304").catch(console.error); //add limbo
           let embed = new Discord.MessageEmbed()
             .setTitle(
               `${member.user.username} has been revived by the Red Priestess ${message.member.user.username}!`
@@ -82,7 +64,7 @@ module.exports = {
     } else {
       console.log("you do not have permission!!!");
       message.channel.send(
-        "Only Melisandre can revive the Dead or White Walkers!"
+        "Only The Red Priestess can revive the Dead or White Walkers!"
       );
     }
   },

@@ -52,7 +52,7 @@ module.exports = {
             .setThumbnail("attachment://fistoffirstmen.png");
           chan.send(embed);
           setTimeout(function () {
-            console.log("--------quest timeout entered----------");
+            console.log("--------quest timeout PATH CHOICE----------");
             member.roles.remove("728742102275457076");
             // chan.send(member.user.username + " took longer than 1 minute to answer the Path Choice question and was booted from the Quest.");
           }, 120 * 1000);
@@ -83,7 +83,7 @@ module.exports = {
             .setThumbnail("attachment://frostfangs.png");
           chan.send(embed);
           setTimeout(function () {
-            console.log("--------quest timeout entered----------");
+            console.log("--------quest timeout PATH CHOICE----------");
             member.roles.remove("728729459263406080");
             // chan.send(member.user.username + " took longer than 1 minute to answer the Path Choice question and was booted from the Quest.");
           }, 120 * 1000);
