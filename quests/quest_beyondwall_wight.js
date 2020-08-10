@@ -1,6 +1,7 @@
 const Money = require("../models/profile.js");
 const Discord = require("discord.js");
-const helper_functions = require("../helper_functions/rolesremover");
+const roles = require("../helper_functions/rolesremover");
+const db = require("../helper_functions/db_functions");
 const wincoins = 30;
 
 module.exports = {
@@ -31,8 +32,9 @@ module.exports = {
           console.log("REACTED CORRECTLY");
           let chance = Math.floor(Math.random() * 2); //WITHOUT VALYRIAN DAGGER 1 IN 2 CHANCE U GET TURNED
           let chance2 = Math.floor(Math.random() * 4); //WITH VALYRIAN DAGGER 1 IN 4 CHANCE U GET TURNED
-          console.log("chance " + chance);
-          console.log("chance " + chance2);
+          let death = 1; //starts off with death as true, but if you survive the fight death is set to false for each part
+          console.log("chance " + chance); //0
+          console.log("chance " + chance2); //3
           var dagger = 0;
           //have dagger?
           member.roles.cache.forEach((role) => {
@@ -47,11 +49,19 @@ module.exports = {
             switch (chance) {
               case 0:
               case 2:
-                chance = 1;
+                death = 0;
                 message.channel.send(
                   member.user.username +
                     " used his sword 🗡 against the White Walker and survived the Fight."
                 );
+                //revised database call to give wightkill and loot
+                // if (coinchance < 3) {
+                //   await db.givecoin(member, wincoins);
+                //   member.send(
+                //     "You looted " + wincoins + " coins from the wight!"
+                //   );
+                // }
+                // await db.givewightkill(member);
 
                 //give kill to member
                 Money.findOne(
@@ -99,7 +109,7 @@ module.exports = {
                 }, 120 * 1000);
                 break;
               case 1:
-                chance = 0; //chance nights watch died so go to next steps to remove roles and kill, but he keeps dagger
+                death = 1; //chance nights watch died so go to next steps to remove roles and kill, but he keeps dagger
                 break;
             }
           } else {
@@ -107,11 +117,19 @@ module.exports = {
               case 0:
               case 1:
               case 3:
-                chance2 = 1;
+                death = 0;
                 message.channel.send(
                   member.user.username +
                     " used his sword 🗡 against the White Walker and survived the Fight."
                 );
+                //revised database call to give wightkill and loot
+                // if (coinchance < 3) {
+                //   await db.givecoin(member, wincoins);
+                //   member.send(
+                //     "You looted " + wincoins + " coins from the wight!"
+                //   );
+                // }
+                // await db.givewightkill(member);
 
                 //give kill to member
                 Money.findOne(
@@ -159,13 +177,13 @@ module.exports = {
                 }, 120 * 1000);
                 break;
               case 2:
-                chance2 = 0; //chance nights watch died so go to next steps to remove roles and kill, but he keeps dagger
+                death = 1; //chance nights watch died so go to next steps to remove roles and kill, but he keeps dagger
                 break;
             }
           }
-          if (chance == 0 || chance2 == 0) {
+          if (death == 1) {
             //remove all roles by calling rolesremover
-            await helper_functions.RolesRemover(member);
+            await roles.RolesRemover(member);
             member.roles.add("713901799324778587").catch(console.error); //white walker role
             member.roles.remove("727748751522922499"); //remove quest beyond wall role
             member.send(
@@ -175,6 +193,7 @@ module.exports = {
               member.user.username +
                 " was bitten by the Wight Beyond the Wall and turned into a White Walker!"
             );
+            // await db.givedeath(member);
             //give death to member
             Money.findOne(
               {
@@ -213,12 +232,19 @@ module.exports = {
           switch (chance) {
             case 0:
             case 2:
-              chance = 1;
+              death = 0;
               message.channel.send(
                 member.user.username +
                   " ran behind a tree and struck down the Wight using his sword 🗡 and survived the Fight."
               );
-
+              //revised database call to give wightkill and loot
+              // if (coinchance < 3) {
+              //   await db.givecoin(member, wincoins);
+              //   member.send(
+              //     "You looted " + wincoins + " coins from the wight!"
+              //   );
+              // }
+              // await db.givewightkill(member);
               //give kill to member
               Money.findOne(
                 {
@@ -267,12 +293,12 @@ module.exports = {
               }, 120 * 1000);
               break;
             case 1:
-              chance = 0; //chance nights watch died so go to next steps to remove roles and kill, but he keeps dagger
+              death = 1; //chance nights watch died so go to next steps to remove roles and kill, but he keeps dagger
               break;
           }
-          if (chance == 0) {
+          if (death == 1) {
             //remove all roles by calling rolesremover
-            await helper_functions.RolesRemover(member);
+            await roles.RolesRemover(member);
             member.roles.add("713901799324778587").catch(console.error); //white walker role
             member.roles.remove("727677376191791105"); //remove quest beyond wall role
             member.send(
@@ -320,11 +346,19 @@ module.exports = {
           switch (chance) {
             case 0:
             case 2:
-              chance = 1;
+              death = 0;
               message.channel.send(
                 member.user.username +
                   " was able to get his archers on the wall to help kill the Wight and make it back to Castle Black."
               );
+              //revised database call to give wightkill and loot
+              // if (coinchance < 3) {
+              //   await db.givecoin(member, wincoins);
+              //   member.send(
+              //     "You looted " + wincoins + " coins from the wight!"
+              //   );
+              // }
+              // await db.givewightkill(member);
 
               //give kill to member
               Money.findOne(
@@ -374,12 +408,12 @@ module.exports = {
               }, 120 * 1000);
               break;
             case 1:
-              chance = 0; //chance nights watch died so go to next steps to remove roles and kill, but he keeps dagger
+              death = 1; //chance nights watch died so go to next steps to remove roles and kill, but he keeps dagger
               break;
           }
-          if (chance == 0) {
+          if (death == 1) {
             //remove all roles by calling rolesremover
-            await helper_functions.RolesRemover(member);
+            await roles.RolesRemover(member);
             member.roles.add("713901799324778587").catch(console.error); //white walker role
             member.roles.remove("727677376191791105"); //remove quest beyond wall role
             member.send(
@@ -389,6 +423,7 @@ module.exports = {
               member.user.username +
                 " was chased down by a fast Wight and turned into a White Walker!"
             );
+            // await db.givedeath(member);
             //give death to member
             Money.findOne(
               {

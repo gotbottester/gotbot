@@ -34,7 +34,7 @@ module.exports = {
               money.meli = money.meli + 1;
               money.bloodmagicxp = 0;
               money.meliage = 0;
-              money.shadowuse = 3;
+              money.shadowuse = 1;
               money.save().catch((err) => console.log(err));
             }
           );
