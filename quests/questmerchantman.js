@@ -24,26 +24,26 @@ module.exports = {
       .addFields(
         {
           name:
-            "Sell Iron Coin for 100 coins (Needed to take you to Braavos in the near future)",
-          value: "^sell_ironcoin",
+            "Sell Iron Coin for 100 coins\n(Needed to take you to Braavos in the near future)",
+          value: "`^sell_ironcoin`",
         },
         {
           name: "Sell Valyrian Dagger for 10 coins",
-          value: "^sell_dagger",
+          value: "`^sell_dagger`",
         },
         {
-          name: "Buy Valyrian Dagger for 20 coins (Useful in Quests and adds .10 points to Duels)",
-          value: "^buy_dagger",
-        },
-        {
-          name:
-            "Buy Dragonglass for 50 coins (Kills White Walkers only and useful for Quest Beyond the Wall)",
-          value: "^buy_dragonglass",
+          name: "Buy Valyrian Dagger for 20 coins\n(Helps Nights Watch with Bites from White Walkers and useful in Quests and Adds points to winning Duel Battles)",
+          value: "`^buy_dagger`",
         },
         {
           name:
-            "Buy a Dire Wolf Pup for 500 coins (Useful in Quests in the near future)",
-          value: "^buy_wolf",
+            "Buy Dragonglass for 30 coins\n(Helps Nights Watch with Bites from White Walkers and useful for Quest Beyond the Wall at the Nights Watch)",
+          value: "`^buy_dragonglass`",
+        },
+        {
+          name:
+            "Buy a Dire Wolf Pup for 500 coins\n(Useful in Quests in the near future)",
+          value: "`^buy_wolf`",
         }
       );
     chan.send(embed);

@@ -20,6 +20,15 @@ module.exports = {
     //MUST HAVE WHITE WALKER ROLE
     if (message.member.roles.cache.has("713901799324778587")) {
       let member = message.mentions.members.first();
+      if (
+        message.member.roles.cache.has("713895055252783175") ||
+        message.member.roles.cache.has("720335392653443163")
+      ) {
+        message.reply(
+          "The Night King and General are not Biters. Leave that to your White Walkers."
+        );
+        return;
+      }
       if (member == null) {
         console.log("NO @MEMBER FOUND");
         message.reply(
@@ -28,7 +37,7 @@ module.exports = {
         return;
       } else {
         var chance = 0;
-        let member1 = message.member;
+        let author = message.member;
         let role = message.guild.roles.cache.find(
           (r) => r.name === "White Walkers"
         );
@@ -63,12 +72,12 @@ module.exports = {
               switch (question) {
                 case 0:
                   chance = 1;
-                  member1.roles.remove("713901799324778587"); //white walker freed from role
-                  member1.roles.add("742098398169268304").catch(console.error); //add limbo
+                  author.roles.remove("713901799324778587"); //white walker freed from role
+                  author.roles.add("742098398169268304").catch(console.error); //add limbo
                   //give kill to member
                   Money.findOne(
                     {
-                      userID: member1.id,
+                      userID: author.id,
                       guildID: message.guild.id,
                     },
                     (err, money) => {
@@ -91,13 +100,13 @@ module.exports = {
               case 0:
               case 2:
                 chance = 2;
-                member1.roles.remove("713901799324778587"); //white walker freed from role
-                member1.roles.add("708346509367836702"); //white walker freed from role WTF IS THIS
-                member1.roles.add("742098398169268304").catch(console.error); //add limbo
+                author.roles.remove("713901799324778587"); //white walker freed from role
+                author.roles.add("708346509367836702"); //white walker freed from role WTF IS THIS
+                author.roles.add("742098398169268304").catch(console.error); //add limbo
                 //give kill to member
                 Money.findOne(
                   {
-                    userID: member1.id,
+                    userID: author.id,
                     guildID: message.guild.id,
                   },
                   (err, money) => {
@@ -142,7 +151,7 @@ module.exports = {
           if (chance == 2) {
             let embed = new Discord.MessageEmbed()
               .setTitle(
-                member.user.username +
+                author.user.username +
                   " attacked the Nights Watchmen however he had Dragonglass and instantly killed the White Walker. The White Walker is now Dead."
               )
               .setDescription(

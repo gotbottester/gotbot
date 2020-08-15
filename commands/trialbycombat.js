@@ -41,6 +41,8 @@ module.exports = {
           "You can only challenge the Living (not Bannerless) to ^trialbycombat. Red Priestess cannot be challenged either for they serve the Lord of Light."
         );
         return;
+      } else if (member1.id == member2.id) {
+        message.reply("You cannot challenge yourself to Trial By Combat.");
       } else {
         message.reply(
           "You have sent a Challenge to " +
@@ -135,7 +137,7 @@ module.exports = {
                         .setColor("YELLOW")
                         .setTimestamp()
                         .attachFiles(["./assets/trial.png"])
-                        .setThumbnail("attachment://trial.png")
+                        .setImage("attachment://trial.png")
                         .setAuthor(
                           `${member1.user.username}` +
                             " received " +
@@ -187,7 +189,7 @@ module.exports = {
                     .setColor("RED")
                     .setTimestamp()
                     .attachFiles(["./assets/trialbycombatdeath.png"])
-                    .setThumbnail("attachment://trialbycombatdeath.png");
+                    .setImage("attachment://trialbycombatdeath.png");
                   chan.send(embeda);
                   break;
                 case 1:
@@ -215,7 +217,7 @@ module.exports = {
                         .setColor("YELLOW")
                         .setTimestamp()
                         .attachFiles(["./assets/trial.png"])
-                        .setThumbnail("attachment://trial.png")
+                        .setImage("attachment://trial.png")
                         .setAuthor(
                           `${member2.user.username}` +
                             " received " +
@@ -267,7 +269,7 @@ module.exports = {
                     .setColor("RED")
                     .setTimestamp()
                     .attachFiles(["./assets/trialbycombatdeath.png"])
-                    .setThumbnail("attachment://trialbycombatdeath.png");
+                    .setImage("attachment://trialbycombatdeath.png");
                   chan.send(embedb);
                   break;
               }

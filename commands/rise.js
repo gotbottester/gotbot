@@ -41,19 +41,21 @@ module.exports = {
           deadrole == "708346509367836702" &&
           burnedrole != "717194087010140212"
         ) {
-          console.log("role " + role1);
-          console.log("entered3");
-
-          console.log("member " + member);
+          console.log("entered rise command");
           member.roles.remove(role1).catch(console.error);
           member.roles.add(role2).catch(console.error);
           cooldownrise.add(message.author.id);
-          console.log("you removed " + member + " role " + role1);
-          message.channel.send(
-            "The Night King has turned " +
-              member.user.username +
-              " into a White Walker! 💀"
-          );
+          var embed = new Discord.MessageEmbed()
+            .setTitle(
+              "The Night King has turned " +
+                member.user.username +
+                " into a White Walker!"
+            )
+            .setColor("BLUE")
+            .setTimestamp()
+            .attachFiles(["./assets/nightkingrise.png"])
+            .setThumbnail("attachment://nightkingrise.png");
+          message.channel.send(embed);
           setTimeout(() => {
             cooldownrise.delete(message.author.id);
             console.log("Cooldown Rise The Dead finished " + message.author.id);

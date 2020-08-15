@@ -1,5 +1,7 @@
 const Money = require("../models/profile.js");
 const Discord = require("discord.js");
+const roles = require("../helper_functions/rolesremover");
+const db = require("../helper_functions/db_functions");
 const wincoins = 30;
 
 module.exports = {
@@ -18,7 +20,7 @@ module.exports = {
     };
     message
       .awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] })
-      .then((collected) => {
+      .then(async (collected) => {
         const reaction = collected.first();
         var chan = message.guild.channels.cache.get("707102776215208008"); //whispers
         // var chan = message.guild.channels.cache.get("714201504583516211"); //test
@@ -42,25 +44,35 @@ module.exports = {
               );
 
               //give coins only to member
-              Money.findOne(
-                {
-                  userID: member.id,
-                  guildID: message.guild.id,
-                },
-                (err, money) => {
-                  if (err) console.log(err);
-                  if (coinchance < 3) {
-                    money.coins = money.coins + wincoins;
-                    member.send(
-                      "You were given " +
-                        wincoins +
-                        " coins from Craster to help you on your Quest!"
-                    );
-                  }
+              if (coinchance < 3) {
+                money.coins = money.coins + wincoins;
+                member.send(
+                  "You were given " +
+                    wincoins +
+                    " coins from Craster to help you on your Quest!"
+                );
+                db.givecoin(member, wincoins);
+              }
 
-                  money.save().catch((err) => console.log(err));
-                }
-              );
+              // Money.findOne(
+              //   {
+              //     userID: member.id,
+              //     guildID: message.guild.id,
+              //   },
+              //   (err, money) => {
+              //     if (err) console.log(err);
+              //     if (coinchance < 3) {
+              //       money.coins = money.coins + wincoins;
+              //       member.send(
+              //         "You were given " +
+              //           wincoins +
+              //           " coins from Craster to help you on your Quest!"
+              //       );
+              //     }
+
+              //     money.save().catch((err) => console.log(err));
+              //   }
+              // );
               member.roles.remove("728720420273913857"); //remove quest beyond wall role
               member.roles.add("728725245149839420"); //quest3 role
               member.send(
@@ -90,24 +102,8 @@ module.exports = {
               break;
           }
           if (chance == 0) {
-            //remove all roles except everyone and Old Gods and White Walkers and Night King
-            member.roles.cache.forEach((role) => {
-              console.log("each role " + role.name);
-              if (
-                role != "707028782522826782" && //everyone
-                role != "707032148493991947" && //old gods
-                role != "712005922578366494" && //mod
-                role != "730319761908563970" && //mod2
-                role != "707094276458414143" && //lords of westeros
-                role != "732050744466997340" && //direwolf
-                role != "734148371308216332" && //direwolfghost
-                role != "734148516800233502" && //shadowcat
-                role != "739206804310982751" && //amulet
-                role != "741145157885493251" //broadsword
-              ) {
-                member.roles.remove(role).catch(console.error);
-              }
-            });
+            //remove all roles by calling rolesremover
+            await roles.RolesRemover(member);
             console.log("member " + member);
             member.roles.add("708346509367836702").catch(console.error); //dead role
             member.roles.remove("728720420273913857"); //remove quest beyond wall role
@@ -119,20 +115,21 @@ module.exports = {
                 " was murdered by Craster during the night! He did not like the way you looked at his wives at dinner."
             );
             //give death to member
-            Money.findOne(
-              {
-                userID: member.id,
-                guildID: message.guild.id,
-              },
-              (err, money) => {
-                if (err) console.log(err);
-                money.items.forEach((entry) => {
-                  money.items.pull(entry);
-                });
-                money.deaths = money.deaths + 1;
-                money.save().catch((err) => console.log(err));
-              }
-            );
+            db.givedeath(member);
+            // Money.findOne(
+            //   {
+            //     userID: member.id,
+            //     guildID: message.guild.id,
+            //   },
+            //   (err, money) => {
+            //     if (err) console.log(err);
+            //     money.items.forEach((entry) => {
+            //       money.items.pull(entry);
+            //     });
+            //     money.deaths = money.deaths + 1;
+            //     money.save().catch((err) => console.log(err));
+            //   }
+            // );
             let embed3 = new Discord.MessageEmbed()
               .setTitle(
                 member.user.username +
@@ -164,25 +161,35 @@ module.exports = {
               );
 
               //give kill to member
-              Money.findOne(
-                {
-                  userID: member.id,
-                  guildID: message.guild.id,
-                },
-                (err, money) => {
-                  if (err) console.log(err);
-                  if (coinchance < 3) {
-                    money.coins = money.coins + wincoins;
-                    member.send(
-                      "You looted " +
-                        wincoins +
-                        " coins from Craster before burning his house down!"
-                    );
-                  }
-                  money.kills = money.kills + 1;
-                  money.save().catch((err) => console.log(err));
-                }
-              );
+              db.givekill(member);
+              if (coinchance < 3) {
+                money.coins = money.coins + wincoins;
+                member.send(
+                  "You looted " +
+                    wincoins +
+                    " coins from Craster before burning his house down!"
+                );
+                db.givecoin(member, wincoins);
+              }
+              // Money.findOne(
+              //   {
+              //     userID: member.id,
+              //     guildID: message.guild.id,
+              //   },
+              //   (err, money) => {
+              //     if (err) console.log(err);
+              //     if (coinchance < 3) {
+              //       money.coins = money.coins + wincoins;
+              //       member.send(
+              //         "You looted " +
+              //           wincoins +
+              //           " coins from Craster before burning his house down!"
+              //       );
+              //     }
+              //     money.kills = money.kills + 1;
+              //     money.save().catch((err) => console.log(err));
+              //   }
+              // );
               member.roles.remove("728720420273913857"); //remove quest beyond wall role
               member.roles.add("728725245149839420"); //quest beyond wall 3 role
               member.send(
@@ -204,7 +211,6 @@ module.exports = {
               setTimeout(function () {
                 console.log("--------quest timeout CRASTER entered----------");
                 member.roles.remove("728725245149839420");
-                // chan.send(member.user.username + " took longer than 1 minute to answer the Start/Path question and was booted from the Quest.");
               }, 120 * 1000);
               break;
             case 1:
@@ -213,24 +219,8 @@ module.exports = {
           }
 
           if (chance == 0) {
-            //remove all roles except everyone and Old Gods and White Walkers and Night King
-            member.roles.cache.forEach((role) => {
-              console.log("each role " + role.name);
-              if (
-                role != "707028782522826782" && //everyone
-                role != "707032148493991947" && //old gods
-                role != "712005922578366494" && //mod
-                role != "730319761908563970" && //mod2
-                role != "707094276458414143" && //lords of westeros
-                role != "732050744466997340" && //direwolf
-                role != "734148371308216332" && //direwolfghost
-                role != "734148516800233502" && //shadowcat
-                role != "739206804310982751" && //amulet
-                role != "741145157885493251" //broadsword
-              ) {
-                member.roles.remove(role).catch(console.error);
-              }
-            });
+            //remove all roles by calling rolesremover
+            await roles.RolesRemover(member);
             console.log("member " + member);
             member.roles.add("713901799324778587").catch(console.error); //white walker role
             member.roles.remove("728720420273913857"); //remove quest beyond wall role
@@ -242,20 +232,21 @@ module.exports = {
                 " with the large Fire, wights appeared and you were bitten and turned into a White Walker!"
             );
             //give death to member
-            Money.findOne(
-              {
-                userID: member.id,
-                guildID: message.guild.id,
-              },
-              (err, money) => {
-                if (err) console.log(err);
-                money.items.forEach((entry) => {
-                  money.items.pull(entry);
-                });
-                money.deaths = money.deaths + 1;
-                money.save().catch((err) => console.log(err));
-              }
-            );
+            db.givedeath(member);
+            // Money.findOne(
+            //   {
+            //     userID: member.id,
+            //     guildID: message.guild.id,
+            //   },
+            //   (err, money) => {
+            //     if (err) console.log(err);
+            //     money.items.forEach((entry) => {
+            //       money.items.pull(entry);
+            //     });
+            //     money.deaths = money.deaths + 1;
+            //     money.save().catch((err) => console.log(err));
+            //   }
+            // );
             let embed6 = new Discord.MessageEmbed()
               .setTitle(
                 member.user.username +
@@ -290,11 +281,6 @@ module.exports = {
           message.delete({ timeout: 3000 });
           member.send("You did not react with the right emoji!");
         }
-        // setTimeout(function () {
-        //   console.log("--------quest timeout entered----------");
-        //   member.roles.remove("728720420273913857");
-        //   chan.send(member.user.username + " took longer than 1 minute to answer the Quest question and was booted from the Quest.");
-        // }, 120 * 1000);
       })
       .catch((collected) => {
         console.log(

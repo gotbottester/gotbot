@@ -56,6 +56,9 @@ module.exports = {
           "You can only challenge the Living (and Not King or Bannerless) to ^duel"
         );
         return;
+      } else if (member1.id == member2.id) {
+        console.log("You cannot duel yourself!");
+        message.reply("You cannot duel yourself.");
       } else {
         chan.send(
           member1.user.username +
@@ -88,7 +91,7 @@ module.exports = {
               var member2CombatScore = Math.random();
 
               console.log(
-                "member1 and member2 combat scores " +
+                "STARTING member1 and member2 combat scores " +
                   member1CombatScore +
                   " and " +
                   member2CombatScore
@@ -149,6 +152,31 @@ module.exports = {
                 //broadsword
                 member1CombatScore += 0.2;
               }
+              //lord items
+              if (member1.roles.cache.has("742497869126434927")) {
+                //widows wail
+                member1CombatScore += 0.3;
+              }
+              if (member1.roles.cache.has("742489354911350955")) {
+                //ice
+                member1CombatScore += 0.3;
+              }
+              if (member1.roles.cache.has("742496368572235776")) {
+                //war hammer
+                member1CombatScore += 0.3;
+              }
+              if (member1.roles.cache.has("742494956895076564")) {
+                //heartsbane
+                member1CombatScore += 0.3;
+              }
+              if (member1.roles.cache.has("742496809108373515")) {
+                //lady forlorn
+                member1CombatScore += 0.3;
+              }
+              if (member1.roles.cache.has("743971539732660224")) {
+                //flaming sword
+                member1CombatScore += 0.5;
+              }
               // //find sword stat to increment member2
               // Money.findOne(
               //   {
@@ -202,6 +230,31 @@ module.exports = {
                 //broadsword
                 member2CombatScore += 0.2;
               }
+              //lord items
+              if (member2.roles.cache.has("742497869126434927")) {
+                //widows wail
+                member2CombatScore += 0.3;
+              }
+              if (member2.roles.cache.has("742489354911350955")) {
+                //ice
+                member2CombatScore += 0.3;
+              }
+              if (member2.roles.cache.has("742496368572235776")) {
+                //war hammer
+                member2CombatScore += 0.3;
+              }
+              if (member2.roles.cache.has("742494956895076564")) {
+                //heartsbane
+                member2CombatScore += 0.3;
+              }
+              if (member2.roles.cache.has("742496809108373515")) {
+                //lady forlorn
+                member2CombatScore += 0.3;
+              }
+              if (member2.roles.cache.has("743971539732660224")) {
+                //flaming sword
+                member2CombatScore += 0.5;
+              }
 
               if (member1CombatScore > member2CombatScore) {
                 console.log(
@@ -225,7 +278,7 @@ module.exports = {
                     //calculate bonus items
                     winratio = money.wins / (money.wins + money.loss);
                     fixedwinratio = winratio.toFixed(2);
-                    if (money.swordsmanxp > 100 && fixedwinratio >= 0.55) {
+                    if (money.swordsmanxp > 100 && fixedwinratio >= 0.55 && !member1.roles.cache.has("741145157885493251")) {
                       //get broadsword
                       member1.roles.add("741145157885493251");
                       let embed = new Discord.MessageEmbed()
@@ -315,7 +368,7 @@ module.exports = {
                     //calculate bonus items
                     winratio = money.wins / (money.wins + money.loss);
                     fixedwinratio = winratio.toFixed(2);
-                    if (money.swordsmanxp > 100 && fixedwinratio >= 0.55) {
+                    if (money.swordsmanxp > 100 && fixedwinratio >= 0.55 && !member2.roles.cache.has("741145157885493251")) {
                       //get broadsword
                       member2.roles.add("741145157885493251");
                       let embed = new Discord.MessageEmbed()

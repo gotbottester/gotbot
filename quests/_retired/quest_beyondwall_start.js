@@ -1,4 +1,4 @@
-const Money = require("../models/profile.js");
+const Money = require("../../models/profile.js");
 const Discord = require("discord.js");
 
 module.exports = {

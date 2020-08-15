@@ -42,13 +42,15 @@ module.exports = {
                 var tally_bloodmagicxp = money.bloodmagicxp + 2; //its taking into effect the 2xp added in this call and not saved to the very end
                 if (tally_bloodmagicxp != 0 && tally_bloodmagicxp % 6 == 0) {
                   money.shadowuse += 1;
+                  money.flamingsword += 1;
                   let embed = new Discord.MessageEmbed()
                     .setTitle(
-                      `The Red Priestess has enough Blood Magic XP through Amulet use for another Shadow now!`
+                      `The Red Priestess has enough Blood Magic XP through Amulet use for another Shadow and to set a Sword on Fire!`
                     )
+                    .setDescription("Use ^shadow to kill a member. Use ^give_flame to give a member the Flaming Sword. Flaming Swords only last while Priestess exists. They give +50 points to Duels, and the ability to Kill White Walkers. Choose your path to good or evil.")
                     .setColor("RED")
-                    .attachFiles(["./assets/melirevives.png"])
-                    .setThumbnail("attachment://melirevives.png");
+                    .attachFiles(["./assets/bloodmagicxp.png"])
+                    .setImage("attachment://bloodmagicxp.png");
                   chan.send(embed);
                 }
                 money.bloodmagicxp += 2;

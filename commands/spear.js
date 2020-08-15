@@ -19,7 +19,7 @@ module.exports = {
     console.log("entered spear command");
     //MUST HAVE NIGHT KING OF WESTEROS ROLE OR GENERAL
     if (
-      message.member.roles.cache.has("716878672820306003") ||
+      message.member.roles.cache.has("713895055252783175") ||
       message.member.roles.cache.has("720335392653443163")
     ) {
       //night king of Westeros or general
@@ -70,7 +70,8 @@ module.exports = {
           (r) => r.id === "729182524185509929"
         );
 
-        if (!member.roles.cache.has("742098398169268304")) { //limbo
+        if (!member.roles.cache.has("742098398169268304")) {
+          //limbo
           if (
             !wightrole &&
             !kingrole &&
@@ -84,52 +85,87 @@ module.exports = {
             !protectedrole &&
             !skinchangerole
           ) {
+            let chance = Math.floor(Math.random() * 3);
             console.log("spear command");
-            //remove all roles except everyone and Old Gods and White Walkers and Night King
-            await helper_functions.RolesRemover(member);
-            member.roles.add(role).catch(console.error);
             cooldownspear.add(message.author.id);
-            let embed = new Discord.MessageEmbed()
-              .setTitle(
-                "The Night King has Ice Speared " +
-                  member.user.username +
-                  " and turned him into a White Walker! He also looted " +
-                  loot +
-                  " from the living..."
-              )
-              .setColor("BLUE")
-              .setTimestamp()
-              .attachFiles(["./assets/spear.png"])
-              .setThumbnail("attachment://spear.png");
-            message.channel.send(embed);
-            //give loot to Night King
-            Money.findOne(
-              {
-                userID: message.member.id,
-                guildID: message.guild.id,
-              },
-              (err, money) => {
-                if (err) console.log(err);
-                money.coins += loot;
-                money.save().catch((err) => console.log(err));
-              }
-            );
-            //give death to mentioned member
-            Money.findOne(
-              {
-                userID: member.id,
-                guildID: message.guild.id,
-              },
-              (err, money) => {
-                if (err) console.log(err);
-                money.items.forEach((entry) => {
-                  money.items.pull(entry);
-                });
-                money.deaths = money.deaths + 1;
-                money.coins -= loot;
-                money.save().catch((err) => console.log(err));
-              }
-            );
+            switch (chance) {
+              case 0:
+              case 2:
+                //remove all roles except everyone and Old Gods and White Walkers and Night King
+                await helper_functions.RolesRemover(member);
+                member.roles.add(role).catch(console.error);
+                if (message.member.roles.cache.has("713895055252783175")) {
+                  var embed = new Discord.MessageEmbed()
+                    .setTitle(
+                      "The Night King has Ice Speared " +
+                        member.user.username +
+                        " and turned him into a White Walker! He also looted " +
+                        loot +
+                        " from the living..."
+                    )
+                    .setColor("BLUE")
+                    .setTimestamp()
+                    .attachFiles(["./assets/spear.png"])
+                    .setThumbnail("attachment://spear.png");
+                } else if (
+                  message.member.roles.cache.has("720335392653443163")
+                ) {
+                  var embed = new Discord.MessageEmbed()
+                    .setTitle(
+                      "The General has Ice Speared " +
+                        member.user.username +
+                        " and turned him into a White Walker! He also looted " +
+                        loot +
+                        " from the living..."
+                    )
+                    .setColor("BLUE")
+                    .setTimestamp()
+                    .attachFiles(["./assets/genspear.png"])
+                    .setThumbnail("attachment://genspear.png");
+                }
+                message.channel.send(embed);
+                //give loot to Night King
+                Money.findOne(
+                  {
+                    userID: message.member.id,
+                    guildID: message.guild.id,
+                  },
+                  (err, money) => {
+                    if (err) console.log(err);
+                    money.coins += loot;
+                    money.save().catch((err) => console.log(err));
+                  }
+                );
+                //give death to mentioned member
+                Money.findOne(
+                  {
+                    userID: member.id,
+                    guildID: message.guild.id,
+                  },
+                  (err, money) => {
+                    if (err) console.log(err);
+                    money.items.forEach((entry) => {
+                      money.items.pull(entry);
+                    });
+                    money.deaths = money.deaths + 1;
+                    money.coins -= loot;
+                    money.save().catch((err) => console.log(err));
+                  }
+                );
+                break;
+              case 1:
+                var embed = new Discord.MessageEmbed()
+                  .setTitle(member.user.username + " dodged the spear! ")
+                  .setDescription(
+                    "There is a 1/3 chance the living dodges a Spear from the Night King or General"
+                  )
+                  .setColor("BLUE")
+                  .setTimestamp()
+                  .attachFiles(["./assets/missedspear.png"])
+                  .setThumbnail("attachment://missedspear.png");
+                message.channel.send(embed);
+                break;
+            }
             setTimeout(() => {
               cooldownspear.delete(message.author.id);
               console.log(

@@ -1,9 +1,7 @@
-//**After kill the group of Wights you head past a Valley. There you run into a large gathering of Freefolk. One of them is huge with a Red Beard. He appears to hate Crows.**\n React with 1️⃣ to give your Chainmail Armour and Dragonglass as a gift against the White Walkers\n React with 2️⃣ to run back to Castle Black instead and report the gathering
-
-//**As you continue to a frozen wasteland, you are all of the sudden surrounded by a group of Wights.**\n React with 1️⃣ to fight the group head on\n React with 2️⃣ to strike a couple down and run back to Castle Black
-
 const Money = require("../models/profile.js");
 const Discord = require("discord.js");
+const roles = require("../helper_functions/rolesremover");
+const db = require("../helper_functions/db_functions");
 const wincoins = 100;
 
 module.exports = {
@@ -21,7 +19,7 @@ module.exports = {
     };
     message
       .awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] })
-      .then((collected) => {
+      .then(async (collected) => {
         const reaction = collected.first();
         var chan = message.guild.channels.cache.get("707102776215208008"); //whispers
         // var chan = message.guild.channels.cache.get("714201504583516211"); //test
@@ -61,6 +59,7 @@ module.exports = {
               member.roles.remove("726663217950097458");
             }
             member.roles.add("734267092924104735").catch(console.error); //old tongue
+            db.givecoin(member, wincoins);
             let embedA = new Discord.MessageEmbed()
               .setTitle(
                 member.user.username +
@@ -84,24 +83,8 @@ module.exports = {
             }, 10 * 1000);
           } else {
             //die
-            //remove all roles except everyone and Old Gods and White Walkers and Night King
-            member.roles.cache.forEach((role) => {
-              console.log("each role " + role.name);
-              if (
-                role != "707028782522826782" && //everyone
-                role != "707032148493991947" && //old gods
-                role != "712005922578366494" && //mod
-                role != "730319761908563970" && //mod2
-                role != "707094276458414143" && //lords of westeros
-                role != "732050744466997340" && //direwolf
-                role != "734148371308216332" && //direwolfghost
-                role != "734148516800233502" && //shadowcat
-                role != "739206804310982751" && //amulet
-                role != "741145157885493251" //broadsword
-              ) {
-                member.roles.remove(role).catch(console.error);
-              }
-            });
+            //remove all roles by calling rolesremover
+            await roles.RolesRemover(member);
             console.log("member " + member);
             member.roles.add("713901799324778587").catch(console.error); //white walker role
             member.send(
@@ -112,20 +95,22 @@ module.exports = {
                 " was struck down and killed by the Freefolk for not bearing any gifts and they felt threatened!"
             );
             //give death to member
-            Money.findOne(
-              {
-                userID: member.id,
-                guildID: message.guild.id,
-              },
-              (err, money) => {
-                if (err) console.log(err);
-                money.items.forEach((entry) => {
-                  money.items.pull(entry);
-                });
-                money.deaths = money.deaths + 1;
-                money.save().catch((err) => console.log(err));
-              }
-            );
+            db.givedeath(member);
+
+            // Money.findOne(
+            //   {
+            //     userID: member.id,
+            //     guildID: message.guild.id,
+            //   },
+            //   (err, money) => {
+            //     if (err) console.log(err);
+            //     money.items.forEach((entry) => {
+            //       money.items.pull(entry);
+            //     });
+            //     money.deaths = money.deaths + 1;
+            //     money.save().catch((err) => console.log(err));
+            //   }
+            // );
             let embedB = new Discord.MessageEmbed()
               .setTitle(
                 member.user.username +

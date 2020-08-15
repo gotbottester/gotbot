@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 var cooldownjail = new Set();
-var cdseconds = 3600;
+var cdseconds = 21600;
 
 module.exports = {
   name: "jail",
@@ -12,15 +12,13 @@ module.exports = {
       message.delete();
       console.log("STILL COOLDOWN");
       return message.reply(
-        "There is a 1 hour cooldown on sending people to the Black Cell."
+        "There is a 6 hour cooldown on sending people to the Black Cell."
       );
     }
 
     console.log("entered jail command");
-    //MUST HAVE KING OR HAND ROLE OR KINGSGUARD ROLE
+    //MUST HAVE KINGSGUARD ROLE
     if (
-      message.member.roles.cache.has("708021014977708033") ||
-      message.member.roles.cache.has("707250754020180079") ||
       message.member.roles.cache.has("735281180521398292")
     ) {
       let member = message.mentions.members.first();
@@ -136,7 +134,7 @@ module.exports = {
                   )
                   .setColor("BLACK")
                   .attachFiles(["./assets/jailed.png"])
-                  .setThumbnail("attachment://jailed.png");
+                  .setImage("attachment://jailed.png");
                 chan.send(embed);
 
                 setTimeout(() => {

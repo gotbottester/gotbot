@@ -167,8 +167,8 @@ module.exports = {
                   )
                   .setColor("WHITE")
                   .setTimestamp()
-                  .attachFiles(["./assets/weirwoodbow.png"])
-                  .setImage("attachment://weirwoodbow.png")
+                  .attachFiles(["./assets/weirwood.png"])
+                  .setImage("attachment://weirwood.png")
                   .addField("Quest Completion: ", `${wincoins} + Coins`);
                 chan.send(embed3);
                 member.roles.add("729097281370062881"); //bow

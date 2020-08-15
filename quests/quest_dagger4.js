@@ -28,7 +28,7 @@ module.exports = {
           let embed = new Discord.MessageEmbed()
             .setTitle(member.user.username + " has gotten a Valyrian Dagger!")
             .setDescription(
-              "You can use Daggers to Kill White Walkers when being Bitten. Save it for Winter is Coming."
+              "You can use Daggers to Kill White Walkers when being Bitten. They are also very useful to help your chances of surviving battles with Wights when you go Beyond the Wall."
             )
             .setColor("GREY")
             .setTimestamp()

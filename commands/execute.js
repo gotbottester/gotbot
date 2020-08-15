@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const Money = require("../models/profile.js");
 const helper_functions = require("../helper_functions/rolesremover");
 var cooldownexecute = new Set();
-var cdseconds = 43200;
+var cdseconds = 86400;
 
 module.exports = {
   name: "execute",
@@ -13,7 +13,7 @@ module.exports = {
     if (cooldownexecute.has(message.author.id)) {
       message.delete();
       console.log("STILL COOLDOWN");
-      return message.reply("There is a 12 hour cooldown on executions.");
+      return message.reply("There is a 24 hour cooldown on executions.");
     }
     console.log("entered execute command");
     //MUST HAVE KING OR HAND ROLE OR NIGHT KING OF WESTEROS

@@ -1,3 +1,5 @@
+const Money = require("../models/profile.js");
+const helper_functions = require("../helper_functions/rolesremover");
 var cooldowntimeout = new Set();
 var cdseconds_timeout = 3600;
 
@@ -37,29 +39,27 @@ module.exports = {
 
         if (!modrole && !Bots && !oldgodsrole) {
           //remove all roles except everyone and Old Gods and White Walkers and Night King
-          member.roles.cache.forEach((role) => {
-            console.log("each role " + role.name);
-            if (
-              role != "707028782522826782" && //everyone
-              role != "707032148493991947" && //old gods
-              role != "712005922578366494" && //mod
-              role != "730319761908563970" && //mod2
-              role != "707094276458414143" && //lords of westeros
-              role != "732050744466997340" && //direwolf
-              role != "734148371308216332" && //direwolfghost
-              role != "734148516800233502" && //shadowcat
-              role != "739206804310982751" && //amulet
-              role != "741145157885493251" //broadsword
-            ) {
-              member.roles.remove(role).catch(console.error);
-            }
-          });
+          helper_functions.RolesRemover(member);
 
           member.roles.add(role).catch(console.error);
           console.log("you gave " + member + " role " + role);
           message.channel.send(
             member.user.username +
               " has been sent to the House of Shame by a Moderator for a Timeout. 1 hour!"
+          );
+          Money.findOne(
+            {
+              userID: member.id,
+              guildID: message.guild.id,
+            },
+            (err, money) => {
+              if (err) console.log(err);
+              money.items.forEach((entry) => {
+                money.items.pull(entry);
+              });
+              money.timeouts = money.timeouts + 1;
+              money.save().catch((err) => console.log(err));
+            }
           );
           setTimeout(() => {
             cooldowntimeout.delete(message.author.id);

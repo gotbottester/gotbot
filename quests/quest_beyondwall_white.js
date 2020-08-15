@@ -1,5 +1,6 @@
 const Money = require("../models/profile.js");
 const Discord = require("discord.js");
+const roles = require("../helper_functions/rolesremover");
 const wincoins = 30;
 
 module.exports = {
@@ -18,7 +19,7 @@ module.exports = {
     };
     message
       .awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] })
-      .then((collected) => {
+      .then(async (collected) => {
         const reaction = collected.first();
         // var chan = message.guild.channels.cache.get("707102776215208008"); //whispers
         var chan = message.guild.channels.cache.get("707102776215208008"); //test
@@ -74,25 +75,9 @@ module.exports = {
                   money.save().catch((err) => console.log(err));
                 }
               );
-              //remove all roles except everyone and Old Gods and White Walkers and Night King
-              member.roles.cache.forEach((role) => {
-                console.log("each role " + role.name);
-                if (
-                  role != "707028782522826782" && //everyone
-                  role != "707032148493991947" && //old gods
-                  role != "712005922578366494" && //mod
-                  role != "730319761908563970" && //mod2
-                  role != "707094276458414143" && //lords of westeros
-                  role != "732050744466997340" && //direwolf
-                  role != "734148371308216332" && //direwolfghost
-                  role != "734148516800233502" && //shadowcat
-                  role != "739206804310982751" && //amulet
-                  role != "741145157885493251" //broadsword
-                ) {
-                  member.roles.remove(role).catch(console.error);
-                }
-              });
-              console.log("member " + member);
+              //remove all roles by calling rolesremover
+              await roles.RolesRemover(member);
+
               member.roles.add("713901799324778587").catch(console.error); //white walker role
               member.roles.remove("728742102275457076"); //remove quest beyond wall 4.2 role
 
@@ -111,11 +96,12 @@ module.exports = {
               chan.send(embed4);
               message.reply(embed4);
               break;
-            case 1: //1 in 5 chance white walker kills you still
-              let chance = Math.floor(Math.random() * 3);
+            case 1: //1 in 4 chance white walker kills you still
+              let chance = Math.floor(Math.random() * 4);
               switch (chance) {
                 case 0:
                 case 2:
+                case 3:
                   message.channel.send(
                     member.user.username +
                       " struck down the White Walker with his Valyrian Dagger and killed it! You should head back to Castle Black, or Continue on your Quest. -->>> <#728832044695552000>"
@@ -192,25 +178,9 @@ module.exports = {
                       money.save().catch((err) => console.log(err));
                     }
                   );
-                  //remove all roles except everyone and Old Gods and White Walkers and Night King
-                  member.roles.cache.forEach((role) => {
-                    console.log("each role " + role.name);
-                    if (
-                      role != "707028782522826782" && //everyone
-                      role != "707032148493991947" && //old gods
-                      role != "712005922578366494" && //mod
-                      role != "730319761908563970" && //mod2
-                      role != "707094276458414143" && //lords of westeros
-                      role != "732050744466997340" && //direwolf
-                      role != "734148371308216332" && //direwolfghost
-                      role != "734148516800233502" && //shadowcat
-                      role != "739206804310982751" && //amulet
-                      role != "741145157885493251" //broadsword
-                    ) {
-                      member.roles.remove(role).catch(console.error);
-                    }
-                  });
-                  console.log("member " + member);
+                  //remove all roles by calling rolesremover
+                  await roles.RolesRemover(member);
+
                   member.roles.add("713901799324778587").catch(console.error); //white walker role
                   member.roles.remove("728742102275457076"); //remove quest beyond wall 4.2 role
 
@@ -267,25 +237,8 @@ module.exports = {
               break;
           }
           if (chance == 0) {
-            //remove all roles except everyone and Old Gods and White Walkers and Night King
-            member.roles.cache.forEach((role) => {
-              console.log("each role " + role.name);
-              if (
-                role != "707028782522826782" && //everyone
-                role != "707032148493991947" && //old gods
-                role != "712005922578366494" && //mod
-                role != "730319761908563970" && //mod2
-                role != "707094276458414143" && //lords of westeros
-                role != "732050744466997340" && //direwolf
-                role != "734148371308216332" && //direwolfghost
-                role != "734148516800233502" && //shadowcat
-                role != "739206804310982751" && //amulet
-                role != "741145157885493251" //broadsword
-              ) {
-                member.roles.remove(role).catch(console.error);
-              }
-            });
-            console.log("member " + member);
+            //remove all roles by calling rolesremover
+            await roles.RolesRemover(member);
             member.roles.add("713901799324778587").catch(console.error); //white walker role
             member.roles.remove("728742102275457076"); //remove quest beyond wall 4.2 role
             member.send(
@@ -347,7 +300,9 @@ module.exports = {
           member.send("You did not react with the right emoji!");
         }
         setTimeout(function () {
-          console.log("--------quest timeout POWERFUL WHITE WALKER entered----------");
+          console.log(
+            "--------quest timeout POWERFUL WHITE WALKER entered----------"
+          );
           member.roles.remove("728742102275457076");
           // chan.send(member.user.username + " took longer than 1 minute to answer the Powerfull White question and was booted from the Quest.");
         }, 60 * 1000);

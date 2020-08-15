@@ -37,22 +37,6 @@ module.exports = {
     );
     console.log("Finished givekill");
   },
-  givedeath: function (member) {
-    //remove all roles except ones noted below
-    console.log("Entered givedeath");
-    Money.findOne(
-      {
-        userID: member.id,
-        guildID: message.guild.id,
-      },
-      (err, money) => {
-        if (err) console.log(err);
-        money.death = money.death + 1;
-        money.save().catch((err) => console.log(err));
-      }
-    );
-    console.log("Finished givedeath");
-  },
   givewightkill: function (member) {
     //remove all roles except ones noted below
     console.log("Entered wightkills");
@@ -75,11 +59,11 @@ module.exports = {
     Money.findOne(
       {
         userID: member.id,
-        guildID: message.guild.id,
+        guildID: member.guild.id,
       },
       (err, money) => {
         if (err) console.log(err);
-        money.coin = money.coin + amount;
+        money.coins = money.coins + amount;
         money.save().catch((err) => console.log(err));
       }
     );
@@ -95,7 +79,7 @@ module.exports = {
       },
       (err, money) => {
         if (err) console.log(err);
-        money.coin = money.coin - amount;
+        money.coins = money.coins - amount;
         money.save().catch((err) => console.log(err));
       }
     );

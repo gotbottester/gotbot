@@ -2,6 +2,8 @@
 
 const Money = require("../models/profile.js");
 const Discord = require("discord.js");
+const roles = require("../helper_functions/rolesremover");
+const db = require("../helper_functions/db_functions");
 const wincoins = 30;
 
 module.exports = {
@@ -20,7 +22,7 @@ module.exports = {
     };
     message
       .awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] })
-      .then((collected) => {
+      .then(async (collected) => {
         const reaction = collected.first();
         var chan = message.guild.channels.cache.get("707102776215208008"); //whispers
         // var chan = message.guild.channels.cache.get("714201504583516211"); //test
@@ -46,24 +48,34 @@ module.exports = {
                 "You offered the Giant some food and he let you pass. However the road ahead is trecherous, you should head back. If you wish, Continue on your Quest. -->>> <#728742583790075904>"
               );
               //give coins only to member
-              Money.findOne(
-                {
-                  userID: member.id,
-                  guildID: message.guild.id,
-                },
-                (err, money) => {
-                  if (err) console.log(err);
-                  if (coinchance < 3) {
-                    money.coins = money.coins + wincoins;
-                    member.send(
-                      "You snuck out " +
-                        wincoins +
-                        " coins from the Giants pile, while he turned his back."
-                    );
-                  }
-                  money.save().catch((err) => console.log(err));
-                }
-              );
+              db.givedeath(member);
+              if (coinchance < 3) {
+                money.coins = money.coins + wincoins;
+                member.send(
+                  "You snuck out " +
+                    wincoins +
+                    " coins from the Giants pile, while he turned his back."
+                );
+                db.givecoin(member, wincoins);
+              }
+              // Money.findOne(
+              //   {
+              //     userID: member.id,
+              //     guildID: message.guild.id,
+              //   },
+              //   (err, money) => {
+              //     if (err) console.log(err);
+              //     if (coinchance < 3) {
+              //       money.coins = money.coins + wincoins;
+              //       member.send(
+              //         "You snuck out " +
+              //           wincoins +
+              //           " coins from the Giants pile, while he turned his back."
+              //       );
+              //     }
+              //     money.save().catch((err) => console.log(err));
+              //   }
+              // );
               let embed = new Discord.MessageEmbed()
                 .setTitle(
                   member.user.username +
@@ -86,24 +98,8 @@ module.exports = {
               break;
           }
           if (chance == 0) {
-            //remove all roles except everyone and Old Gods and White Walkers and Night King
-            member.roles.cache.forEach((role) => {
-              console.log("each role " + role.name);
-              if (
-                role != "707028782522826782" && //everyone
-                role != "707032148493991947" && //old gods
-                role != "712005922578366494" && //mod
-                role != "730319761908563970" && //mod2
-                role != "707094276458414143" && //lords of westeros
-                role != "732050744466997340" && //direwolf
-                role != "734148371308216332" && //direwolfghost
-                role != "734148516800233502" && //shadowcat
-                role != "739206804310982751" && //amulet
-                role != "741145157885493251" //broadsword
-              ) {
-                member.roles.remove(role).catch(console.error);
-              }
-            });
+            //remove all roles by calling rolesremover
+            await roles.RolesRemover(member);
             console.log("member " + member);
             member.roles.add("708346509367836702").catch(console.error); //dead role
             member.roles.remove("728742102275457076"); //remove quest beyond wall 4.2 role
@@ -113,20 +109,21 @@ module.exports = {
                 " was killed by the Giant for he prefers shiny objects!"
             );
             //give death to member
-            Money.findOne(
-              {
-                userID: member.id,
-                guildID: message.guild.id,
-              },
-              (err, money) => {
-                if (err) console.log(err);
-                money.items.forEach((entry) => {
-                  money.items.pull(entry);
-                });
-                money.deaths = money.deaths + 1;
-                money.save().catch((err) => console.log(err));
-              }
-            );
+            db.givedeath(member);
+            // Money.findOne(
+            //   {
+            //     userID: member.id,
+            //     guildID: message.guild.id,
+            //   },
+            //   (err, money) => {
+            //     if (err) console.log(err);
+            //     money.items.forEach((entry) => {
+            //       money.items.pull(entry);
+            //     });
+            //     money.deaths = money.deaths + 1;
+            //     money.save().catch((err) => console.log(err));
+            //   }
+            // );
             let embed3 = new Discord.MessageEmbed()
               .setTitle(
                 member.user.username +
@@ -163,38 +160,23 @@ module.exports = {
                   " does not have a Chainmail armor to give! The Giant instantly crushes you!"
               );
               //give death to member
-              Money.findOne(
-                {
-                  userID: member.id,
-                  guildID: message.guild.id,
-                },
-                (err, money) => {
-                  if (err) console.log(err);
-                  money.items.forEach((entry) => {
-                    money.items.pull(entry);
-                  });
-                  money.deaths = money.deaths + 1;
-                  money.save().catch((err) => console.log(err));
-                }
-              );
-              //remove all roles except everyone and Old Gods and White Walkers and Night King
-              member.roles.cache.forEach((role) => {
-                console.log("each role " + role.name);
-                if (
-                  role != "707028782522826782" && //everyone
-                  role != "707032148493991947" && //old gods
-                  role != "712005922578366494" && //mod
-                  role != "730319761908563970" && //mod2
-                  role != "707094276458414143" && //lords of westeros
-                  role != "732050744466997340" && //direwolf
-                  role != "734148371308216332" && //direwolfghost
-                  role != "734148516800233502" && //shadowcat
-                  role != "739206804310982751" && //amulet
-                  role != "741145157885493251" //broadsword
-                ) {
-                  member.roles.remove(role).catch(console.error);
-                }
-              });
+              db.givedeath(member);
+              // Money.findOne(
+              //   {
+              //     userID: member.id,
+              //     guildID: message.guild.id,
+              //   },
+              //   (err, money) => {
+              //     if (err) console.log(err);
+              //     money.items.forEach((entry) => {
+              //       money.items.pull(entry);
+              //     });
+              //     money.deaths = money.deaths + 1;
+              //     money.save().catch((err) => console.log(err));
+              //   }
+              // );
+              //remove all roles by calling rolesremover
+              await roles.RolesRemover(member);
               console.log("member " + member);
               member.roles.add("708346509367836702").catch(console.error); //dead role
               member.roles.remove("728742102275457076"); //remove quest beyond wall 4.2 role

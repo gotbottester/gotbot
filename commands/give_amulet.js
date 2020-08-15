@@ -17,6 +17,9 @@ module.exports = {
           "you need to specify a member after the command: @membername"
         );
         return;
+      } else if (member.roles.cache.has("713409866764517517")) {
+        message.reply("you cannot grant yourself the Amulet.");
+        return;
       } else {
         //check shadowuse numbers make sure less than 3
         Money.findOne(
@@ -26,13 +29,13 @@ module.exports = {
           },
           (err, money) => {
             if (err) console.log(err);
-            if (money.amuletuse <= 2) {
+            if (money.amuletuse < 2) {
               var chan = message.guild.channels.cache.get("707102776215208008"); //whispers
               let role = message.guild.roles.cache.find(
                 (r) => r.id === "739206804310982751"
               ); //ruby amulet
               member.roles.add(role).catch(console.error);
-              member.roles.add("739206804310982751").catch(console.error); //add shadow marked
+              // member.roles.add("739206804310982751").catch(console.error); //add shadow marked
               member.send(
                 "The Red Priestess has gifted you a Ruby Amulet. Use ^amulet to revive yourself for Free when dead."
               );
@@ -58,7 +61,9 @@ module.exports = {
               );
             } else {
               //amulets are used up message
-              message.channel.send("The Red Priestess can only give out 2 Revive Amulets. Choose wisely.");
+              message.channel.send(
+                "The Red Priestess can only give out 2 Revive Amulets. Choose wisely."
+              );
             }
           }
         );

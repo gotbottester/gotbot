@@ -38,6 +38,10 @@ module.exports = {
                 .setTitle(
                   `${member.user.username} Bought a Valryian Dagger from the Wandering Merchant for ${buyprice} coins.`
                 )
+                embed.addField(
+                  "Purpose: ",
+                  "Useful in Quests Beyond the Wall and for Nights Watch to help against being bit by White Walkers at the Wall. Gives you 1/2 chance of surviving a White Walker bite."
+                )
                 .setColor("GREEN")
                 .attachFiles(["./assets/valyriandagger.png"])
                 .setThumbnail("attachment://valyriandagger.png");

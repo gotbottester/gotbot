@@ -99,7 +99,7 @@ module.exports = {
                     )
                     .setColor("BLACK")
                     .attachFiles(["./assets/shadow.png"])
-                    .setThumbnail("attachment://shadow.png");
+                    .setImage("attachment://shadow.png");
                   chan.send(embed);
                   //give kill to author
                   Money.findOne(

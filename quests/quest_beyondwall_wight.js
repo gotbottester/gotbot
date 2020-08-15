@@ -55,32 +55,32 @@ module.exports = {
                     " used his sword 🗡 against the White Walker and survived the Fight."
                 );
                 //revised database call to give wightkill and loot
-                // if (coinchance < 3) {
-                //   await db.givecoin(member, wincoins);
-                //   member.send(
-                //     "You looted " + wincoins + " coins from the wight!"
-                //   );
-                // }
-                // await db.givewightkill(member);
+                if (coinchance < 3) {
+                  await db.givecoin(member, wincoins);
+                  member.send(
+                    "You looted " + wincoins + " coins from the wight!"
+                  );
+                }
+                await db.givewightkill(member);
 
-                //give kill to member
-                Money.findOne(
-                  {
-                    userID: member.id,
-                    guildID: message.guild.id,
-                  },
-                  (err, money) => {
-                    if (err) console.log(err);
-                    if (coinchance < 3) {
-                      money.coins = money.coins + wincoins;
-                      member.send(
-                        "You looted " + wincoins + " coins from the wight!"
-                      );
-                    }
-                    money.wightkills = money.wightkills + 1;
-                    money.save().catch((err) => console.log(err));
-                  }
-                );
+                // give kill to member
+                // Money.findOne(
+                //   {
+                //     userID: member.id,
+                //     guildID: message.guild.id,
+                //   },
+                //   (err, money) => {
+                //     if (err) console.log(err);
+                //     if (coinchance < 3) {
+                //       money.coins = money.coins + wincoins;
+                //       member.send(
+                //         "You looted " + wincoins + " coins from the wight!"
+                //       );
+                //     }
+                //     money.wightkills = money.wightkills + 1;
+                //     money.save().catch((err) => console.log(err));
+                //   }
+                // );
                 member.roles.remove("727677376191791105"); //remove quest beyond wall role
                 member.roles.add("727748751522922499"); //ranger role
                 member.roles.add("728720420273913857"); //next quest
@@ -123,32 +123,32 @@ module.exports = {
                     " used his sword 🗡 against the White Walker and survived the Fight."
                 );
                 //revised database call to give wightkill and loot
-                // if (coinchance < 3) {
-                //   await db.givecoin(member, wincoins);
-                //   member.send(
-                //     "You looted " + wincoins + " coins from the wight!"
-                //   );
-                // }
-                // await db.givewightkill(member);
+                if (coinchance < 3) {
+                  await db.givecoin(member, wincoins);
+                  member.send(
+                    "You looted " + wincoins + " coins from the wight!"
+                  );
+                }
+                await db.givewightkill(member);
 
                 //give kill to member
-                Money.findOne(
-                  {
-                    userID: member.id,
-                    guildID: message.guild.id,
-                  },
-                  (err, money) => {
-                    if (err) console.log(err);
-                    if (coinchance < 3) {
-                      money.coins = money.coins + wincoins;
-                      member.send(
-                        "You looted " + wincoins + " coins from the wight!"
-                      );
-                    }
-                    money.wightkills = money.wightkills + 1;
-                    money.save().catch((err) => console.log(err));
-                  }
-                );
+                // Money.findOne(
+                //   {
+                //     userID: member.id,
+                //     guildID: message.guild.id,
+                //   },
+                //   (err, money) => {
+                //     if (err) console.log(err);
+                //     if (coinchance < 3) {
+                //       money.coins = money.coins + wincoins;
+                //       member.send(
+                //         "You looted " + wincoins + " coins from the wight!"
+                //       );
+                //     }
+                //     money.wightkills = money.wightkills + 1;
+                //     money.save().catch((err) => console.log(err));
+                //   }
+                // );
                 member.roles.remove("727677376191791105"); //remove quest beyond wall role
                 member.roles.add("727748751522922499"); //ranger role
                 member.roles.add("728720420273913857"); //next quest
@@ -193,22 +193,22 @@ module.exports = {
               member.user.username +
                 " was bitten by the Wight Beyond the Wall and turned into a White Walker!"
             );
-            // await db.givedeath(member);
+            await db.givedeath(member);
             //give death to member
-            Money.findOne(
-              {
-                userID: member.id,
-                guildID: message.guild.id,
-              },
-              (err, money) => {
-                if (err) console.log(err);
-                money.items.forEach((entry) => {
-                  money.items.pull(entry);
-                });
-                money.deaths = money.deaths + 1;
-                money.save().catch((err) => console.log(err));
-              }
-            );
+            // Money.findOne(
+            //   {
+            //     userID: member.id,
+            //     guildID: message.guild.id,
+            //   },
+            //   (err, money) => {
+            //     if (err) console.log(err);
+            //     money.items.forEach((entry) => {
+            //       money.items.pull(entry);
+            //     });
+            //     money.deaths = money.deaths + 1;
+            //     money.save().catch((err) => console.log(err));
+            //   }
+            // );
             let embed3 = new Discord.MessageEmbed()
               .setTitle(
                 member.user.username +
@@ -238,31 +238,31 @@ module.exports = {
                   " ran behind a tree and struck down the Wight using his sword 🗡 and survived the Fight."
               );
               //revised database call to give wightkill and loot
-              // if (coinchance < 3) {
-              //   await db.givecoin(member, wincoins);
-              //   member.send(
-              //     "You looted " + wincoins + " coins from the wight!"
-              //   );
-              // }
-              // await db.givewightkill(member);
+              if (coinchance < 3) {
+                await db.givecoin(member, wincoins);
+                member.send(
+                  "You looted " + wincoins + " coins from the wight!"
+                );
+              }
+              await db.givewightkill(member);
               //give kill to member
-              Money.findOne(
-                {
-                  userID: member.id,
-                  guildID: message.guild.id,
-                },
-                (err, money) => {
-                  if (err) console.log(err);
-                  if (coinchance < 3) {
-                    money.coins = money.coins + wincoins;
-                    member.send(
-                      "You looted " + wincoins + " coins from the wight!"
-                    );
-                  }
-                  money.wightkills = money.wightkills + 1;
-                  money.save().catch((err) => console.log(err));
-                }
-              );
+              // Money.findOne(
+              //   {
+              //     userID: member.id,
+              //     guildID: message.guild.id,
+              //   },
+              //   (err, money) => {
+              //     if (err) console.log(err);
+              //     if (coinchance < 3) {
+              //       money.coins = money.coins + wincoins;
+              //       member.send(
+              //         "You looted " + wincoins + " coins from the wight!"
+              //       );
+              //     }
+              //     money.wightkills = money.wightkills + 1;
+              //     money.save().catch((err) => console.log(err));
+              //   }
+              // );
               member.roles.remove("727677376191791105"); //remove quest beyond wall role
               member.roles.add("727748751522922499"); //ranger role
               member.roles.add("728720420273913857"); //next quest
@@ -309,20 +309,22 @@ module.exports = {
                 " was bitten by the Wight Beyond the Wall and turned into a White Walker!"
             );
             //give death to member
-            Money.findOne(
-              {
-                userID: member.id,
-                guildID: message.guild.id,
-              },
-              (err, money) => {
-                if (err) console.log(err);
-                money.items.forEach((entry) => {
-                  money.items.pull(entry);
-                });
-                money.deaths = money.deaths + 1;
-                money.save().catch((err) => console.log(err));
-              }
-            );
+            await db.givedeath(member);
+
+            // Money.findOne(
+            //   {
+            //     userID: member.id,
+            //     guildID: message.guild.id,
+            //   },
+            //   (err, money) => {
+            //     if (err) console.log(err);
+            //     money.items.forEach((entry) => {
+            //       money.items.pull(entry);
+            //     });
+            //     money.deaths = money.deaths + 1;
+            //     money.save().catch((err) => console.log(err));
+            //   }
+            // );
             let embed6 = new Discord.MessageEmbed()
               .setTitle(
                 member.user.username +
@@ -352,32 +354,32 @@ module.exports = {
                   " was able to get his archers on the wall to help kill the Wight and make it back to Castle Black."
               );
               //revised database call to give wightkill and loot
-              // if (coinchance < 3) {
-              //   await db.givecoin(member, wincoins);
-              //   member.send(
-              //     "You looted " + wincoins + " coins from the wight!"
-              //   );
-              // }
-              // await db.givewightkill(member);
+              if (coinchance < 3) {
+                await db.givecoin(member, wincoins);
+                member.send(
+                  "You looted " + wincoins + " coins from the wight!"
+                );
+              }
+              await db.givewightkill(member);
 
               //give kill to member
-              Money.findOne(
-                {
-                  userID: member.id,
-                  guildID: message.guild.id,
-                },
-                (err, money) => {
-                  if (err) console.log(err);
-                  if (coinchance < 3) {
-                    money.coins = money.coins + wincoins;
-                    member.send(
-                      "You looted " + wincoins + " coins from the wight!"
-                    );
-                  }
-                  money.wightkills = money.wightkills + 1;
-                  money.save().catch((err) => console.log(err));
-                }
-              );
+              // Money.findOne(
+              //   {
+              //     userID: member.id,
+              //     guildID: message.guild.id,
+              //   },
+              //   (err, money) => {
+              //     if (err) console.log(err);
+              //     if (coinchance < 3) {
+              //       money.coins = money.coins + wincoins;
+              //       member.send(
+              //         "You looted " + wincoins + " coins from the wight!"
+              //       );
+              //     }
+              //     money.wightkills = money.wightkills + 1;
+              //     money.save().catch((err) => console.log(err));
+              //   }
+              // );
               member.roles.remove("727677376191791105"); //remove quest beyond wall role
               member.roles.add("727748751522922499"); //ranger role
               member.roles.add("728720420273913857"); //next quest
@@ -423,22 +425,22 @@ module.exports = {
               member.user.username +
                 " was chased down by a fast Wight and turned into a White Walker!"
             );
-            // await db.givedeath(member);
+            await db.givedeath(member);
             //give death to member
-            Money.findOne(
-              {
-                userID: member.id,
-                guildID: message.guild.id,
-              },
-              (err, money) => {
-                if (err) console.log(err);
-                money.deaths = money.deaths + 1;
-                money.items.forEach((entry) => {
-                  money.items.pull(entry);
-                });
-                money.save().catch((err) => console.log(err));
-              }
-            );
+            // Money.findOne(
+            //   {
+            //     userID: member.id,
+            //     guildID: message.guild.id,
+            //   },
+            //   (err, money) => {
+            //     if (err) console.log(err);
+            //     money.deaths = money.deaths + 1;
+            //     money.items.forEach((entry) => {
+            //       money.items.pull(entry);
+            //     });
+            //     money.save().catch((err) => console.log(err));
+            //   }
+            // );
             let embed9 = new Discord.MessageEmbed()
               .setTitle(
                 member.user.username +

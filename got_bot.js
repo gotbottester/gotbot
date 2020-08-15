@@ -1,5 +1,5 @@
-////////////////////////
-////////////////////////
+/////////////////////////
+/////////////////////////
 
 const Discord = require("discord.js");
 const client = new Discord.Client();
@@ -11,8 +11,8 @@ const fs = require("fs");
 //Profile/Coin System
 const Money = require("./models/profile.js");
 const mongoose = require("mongoose");
-const pardon = require("./commands/pardon");
-const questdagger = require("./quests/questdagger");
+// const pardon = require("./commands/pardon");
+// const questdagger = require("./quests/questdagger");
 mongoose.connect(
 );
 //used to give King 100 coins on auto feature promoting new king
@@ -76,11 +76,13 @@ client.on("ready", () => {
     let channel_quest_lordoflight = guild.channels.cache.get(
       "736095446409281597"
     ); //send to quest lord of light channel
-    let chan_questbeyondwall = guild.channels.cache.get("728738536534048869"); //TEST
     let channel_quest_beyondNW = guild.channels.cache.get("707288311596711958"); //send to nights watch channel //714201504583516211 //707288311596711958
+    let channel_quest_start1 = guild.channels.cache.get("727677918142136431"); //questbeyondwall
+    let channel_quest_start2 = guild.channels.cache.get("728718626344927252"); //questbeyondwall2
+    let channel_quest_start3 = guild.channels.cache.get("728738536534048869"); //questbeyondwall3
     //
     var randdagger = Math.round(Math.random() * (7200 - 3600)) + 3600;
-    var randIron = Math.round(Math.random() * (10800 - 3600)) + 3600;
+    var randIron = Math.round(Math.random() * (10800 - 7200)) + 7200;
     var randpriestess = Math.round(Math.random() * (3600 - 1800)) + 1800;
     var randBeyond = Math.round(Math.random() * (3600 - 1800)) + 1800;
     var randmerchant = Math.round(Math.random() * (3600 - 1800)) + 1800;
@@ -97,12 +99,11 @@ client.on("ready", () => {
     // TAXES
     //--------------------------------------------
     setInterval(function () {
-      console.log("test time");
       var today = new Date();
       var time = today.getHours();
       var housemembers = 0;
-      var stimulus = 7;
-      var bonus_smallcouncil = stimulus + 2;
+      var stimulus = 20;
+      var bonus_smallcouncil = stimulus;
       var taxes = 0.25;
       var total_stimulus = 0;
       var taxed_amount;
@@ -111,10 +112,9 @@ client.on("ready", () => {
       var taxtoHand;
       var nostimulus = 0;
       if (time == 23) {
-        console.log("time 23 == " + time);
         //see if night king exists, if not push taxes.
         guild.members.cache.each((membs) => {
-          if (membs.roles.cache.has("716878672820306003")) {
+          if (membs.roles.cache.has("713895055252783175")) {
             nostimulus = 1;
           }
         });
@@ -234,7 +234,7 @@ client.on("ready", () => {
             .setTimestamp()
             .attachFiles(["./assets/coinbag.png"])
             .setThumbnail("attachment://coinbag.png")
-            .setTitle("Stimulus + Taxes Daily Announcement")
+            .setTitle("Kingdom Stimulus + Taxes Daily Announcement")
             .setDescription(
               `Attention House Members of Westeros. You have received ${stimulus} coins each for being in a House. Those without a House, or in Essos will not get payments.\n However, the King has taxed you .25% of your ${stimulus} coins.\n\n The King has received ${Math.floor(
                 taxtoKing
@@ -268,14 +268,297 @@ client.on("ready", () => {
         console.log("not time");
       }
     }, 3600 * 1000);
-        //--------------------------------------------
+    //--------------------------------------------
+    // HOUSE TAXES
+    //--------------------------------------------
+    setInterval(function () {
+      var today = new Date();
+      var time = today.getHours();
+      var flag_lannister = 0;
+      var flag_stark = 0;
+      var flag_tyrell = 0;
+      var flag_baratheon = 0;
+      var flag_vale = 0;
+      var house_stimulus = 10;
+      var lord_stimulus = 30;
+      var nostimulus = 0;
+      if (time == 20) {
+        //see if night king exists, if not push taxes.
+        guild.members.cache.each((membs) => {
+          if (membs.roles.cache.has("713895055252783175")) {
+            nostimulus = 1;
+          }
+        });
+        //check House Lannister for Lord and flag and pay lord payment
+        guild.members.cache.each((membs) => {
+          if (membs.roles.cache.has("742482004557299714")) {
+            flag_lannister = 1;
+            Money.findOne(
+              {
+                userID: membs.id,
+                guildID: myguild,
+              },
+              (err, money) => {
+                if (err) console.log(err);
+                money.coins = money.coins + lord_stimulus;
+                money.save().catch((err) => console.log(err));
+              }
+            );
+            membs.send(
+              membs.user.username +
+                " , You received " +
+                lord_stimulus +
+                " Coins today for being an appointed Lord."
+            );
+          }
+        });
+        //check House Stark for Lord and flag and pay lord payment
+        guild.members.cache.each((membs) => {
+          if (membs.roles.cache.has("742483411079397407")) {
+            flag_stark = 1;
+            Money.findOne(
+              {
+                userID: membs.id,
+                guildID: myguild,
+              },
+              (err, money) => {
+                if (err) console.log(err);
+                money.coins = money.coins + lord_stimulus;
+                money.save().catch((err) => console.log(err));
+              }
+            );
+            membs.send(
+              membs.user.username +
+                " , You received " +
+                lord_stimulus +
+                " Coins today for being an appointed Lord."
+            );
+          }
+        });
+        //check House Vale for Lord and flag and pay lord payment
+        guild.members.cache.each((membs) => {
+          if (membs.roles.cache.has("742482606658158624")) {
+            flag_vale = 1;
+            Money.findOne(
+              {
+                userID: membs.id,
+                guildID: myguild,
+              },
+              (err, money) => {
+                if (err) console.log(err);
+                money.coins = money.coins + lord_stimulus;
+                money.save().catch((err) => console.log(err));
+              }
+            );
+            membs.send(
+              membs.user.username +
+                " , You received " +
+                lord_stimulus +
+                " Coins today for being an appointed Lord."
+            );
+          }
+        });
+        //check House Tyrell for Lord and flag and pay lord payment
+        guild.members.cache.each((membs) => {
+          if (membs.roles.cache.has("742482492606513183")) {
+            flag_tyrell = 1;
+            Money.findOne(
+              {
+                userID: membs.id,
+                guildID: myguild,
+              },
+              (err, money) => {
+                if (err) console.log(err);
+                money.coins = money.coins + lord_stimulus;
+                money.save().catch((err) => console.log(err));
+              }
+            );
+            membs.send(
+              membs.user.username +
+                " , You received " +
+                lord_stimulus +
+                " Coins today for being an appointed Lord."
+            );
+          }
+        });
+        //check House Baratheon for Lord and flag and pay lord payment
+        guild.members.cache.each((membs) => {
+          if (membs.roles.cache.has("742482806118285323")) {
+            flag_baratheon = 1;
+            Money.findOne(
+              {
+                userID: membs.id,
+                guildID: myguild,
+              },
+              (err, money) => {
+                if (err) console.log(err);
+                money.coins = money.coins + lord_stimulus;
+                money.save().catch((err) => console.log(err));
+              }
+            );
+            membs.send(
+              membs.user.username +
+                " , You received " +
+                lord_stimulus +
+                " Coins today for being an appointed Lord."
+            );
+          }
+        });
+        if (nostimulus != 1) {
+          guild.members.cache.each((membs) => {
+            if (
+              flag_lannister == 1 && //house has lord
+              membs.roles.cache.has("707069479833698326") && //house member
+              !membs.roles.cache.has("742482004557299714") //not house lord, already paid above
+            ) {
+              Money.findOne(
+                {
+                  userID: membs.id,
+                  guildID: myguild,
+                },
+                (err, money) => {
+                  if (err) console.log(err);
+                  money.coins = money.coins + house_stimulus;
+                  money.save().catch((err) => console.log(err));
+                }
+              );
+              membs.send(
+                membs.user.username +
+                  " , You received " +
+                  house_stimulus +
+                  " Coins today for being in a House with an appointed Lord."
+              );
+            }
+            if (
+              flag_stark == 1 &&
+              membs.roles.cache.has("707069333494431854") &&
+              !membs.roles.cache.has("742483411079397407")
+            ) {
+              Money.findOne(
+                {
+                  userID: membs.id,
+                  guildID: myguild,
+                },
+                (err, money) => {
+                  if (err) console.log(err);
+                  money.coins = money.coins + house_stimulus;
+                  money.save().catch((err) => console.log(err));
+                }
+              );
+              membs.send(
+                membs.user.username +
+                  " , You received " +
+                  house_stimulus +
+                  " Coins today for being in a House with an appointed Lord."
+              );
+            }
+            if (
+              flag_tyrell == 1 &&
+              membs.roles.cache.has("707073467283144704") &&
+              !membs.roles.cache.has("742482492606513183")
+            ) {
+              Money.findOne(
+                {
+                  userID: membs.id,
+                  guildID: myguild,
+                },
+                (err, money) => {
+                  if (err) console.log(err);
+                  money.coins = money.coins + house_stimulus;
+                  money.save().catch((err) => console.log(err));
+                }
+              );
+              membs.send(
+                membs.user.username +
+                  " , You received " +
+                  house_stimulus +
+                  " Coins today for being in a House with an appointed Lord."
+              );
+            }
+            if (
+              flag_baratheon == 1 &&
+              membs.roles.cache.has("707073882321846355") &&
+              !membs.roles.cache.has("742482806118285323")
+            ) {
+              Money.findOne(
+                {
+                  userID: membs.id,
+                  guildID: myguild,
+                },
+                (err, money) => {
+                  if (err) console.log(err);
+                  money.coins = money.coins + house_stimulus;
+                  money.save().catch((err) => console.log(err));
+                }
+              );
+              membs.send(
+                membs.user.username +
+                  " , You received " +
+                  house_stimulus +
+                  " Coins today for being in a House with an appointed Lord."
+              );
+            }
+            if (
+              flag_vale == 1 &&
+              membs.roles.cache.has("707073800474198078") &&
+              !membs.roles.cache.has("742482606658158624")
+            ) {
+              Money.findOne(
+                {
+                  userID: membs.id,
+                  guildID: myguild,
+                },
+                (err, money) => {
+                  if (err) console.log(err);
+                  money.coins = money.coins + house_stimulus;
+                  money.save().catch((err) => console.log(err));
+                }
+              );
+              membs.send(
+                membs.user.username +
+                  " , You received " +
+                  house_stimulus +
+                  " Coins today for being in a House with an appointed Lord."
+              );
+            }
+          });
+          const embed = new Discord.MessageEmbed()
+            .setColor("ORANGE")
+            .setTimestamp()
+            .attachFiles(["./assets/coinbag.png"])
+            .setThumbnail("attachment://coinbag.png")
+            .setTitle("Lord Stimulus")
+            .setDescription(
+              `Attention House Members of Westeros. You have received ${house_stimulus} coins each for having a Lord appointed in your House. It pays to be loyal.\nThis is in addition to the Kingdom Stimulus payment which is Taxed by King.`
+            )
+            .addField(`Lord of the House receives:`, `${lord_stimulus} Coins`);
+          channel_w.send({
+            embed,
+          });
+        } else {
+          const embed = new Discord.MessageEmbed()
+            .setColor("BLACK")
+            .setTimestamp()
+            .attachFiles(["./assets/nostimulus.png"])
+            .setThumbnail("attachment://nostimulus.png")
+            .setTitle("No Lord Stimulus Announcement")
+            .setDescription(
+              `While the Night King has taken over Westeros, there will not be any Stimulus payments. The Economy is shut down!`
+            );
+          channel_w.send({
+            embed,
+          });
+        }
+      }
+    }, 3600 * 1000);
+    //--------------------------------------------
     // MARKER QUEST TEST
     //--------------------------------------------
     // setInterval(function () {
     //   channel_T.send(
     //     "Quest for TEST. (First person to react to this message with 👍 within 30 seconds gets the Quest)"
     //   );
-    // }, 10 * 1000);
+    // }, 20 * 1000);
     //--------------------------------------------
     // BLACK CELL QUEST
     //--------------------------------------------
@@ -305,7 +588,7 @@ client.on("ready", () => {
       var today = new Date();
       var time = today.getHours();
       console.log("time priestess variable " + time);
-      if (time == 15) {
+      if (time == 12) {
         guild.members.cache.each((membs) => {
           if (membs.roles.cache.has("713409866764517517")) {
             console.log("found user with red priestess");
@@ -318,13 +601,22 @@ client.on("ready", () => {
                 if (err) console.log(err);
                 if (money.meliage > 5) {
                   membs.roles.remove("713409866764517517");
-                  channel_w.send(
-                    "The Red Priestess has reached the age limit of 5 days. Be ready for the quest to become one to re-appear shortly!"
-                  );
+                  const embed = new Discord.MessageEmbed()
+                    .setColor("RED")
+                    .setTimestamp()
+                    .attachFiles(["./assets/redpriestessgone.png"])
+                    .setImage("attachment://redpriestessgone.png")
+                    .setTitle(
+                      "The Red Priestess has reached the age limit of 5 days. She is no more."
+                    )
+                    .setDescription(
+                      `The Lord of Light will appear randomly to choose another Red Priestess, be ready to pray!`
+                    );
+                  channel_w.send(embed);
+                  money.bloodmagicxp = 0;
+                  money.amuletuse = 0;
                 }
                 money.meliage = money.meliage + 1;
-                money.bloodmagicxp = 0;
-                money.amuletuse = 0;
                 money.save().catch((err) => console.log(err));
               }
             );
@@ -413,33 +705,33 @@ client.on("ready", () => {
     //--------------------------------------------
     // RED PRIESTESS 1ST QUESTION
     //--------------------------------------------
-    setInterval(function () {
-      melisandreexist = 0;
-      guild.members.cache.each((membs) => {
-        if (membs.roles.cache.has("713409866764517517")) {
-          //do nothing if melisandre found
-          melisandreexist = 1;
-          console.log("Melisandre exists on server");
-          return;
-        } else {
-          console.log("Melisandre DOES NOT exist on server");
-        }
-      });
-      console.log("RED PRIESTESS ALREADY EXISTS DO NOTHING");
-      if (melisandreexist == 0) {
-        channel_w.send(
-          "Pray to the Lord of Light to learn the powerful dark arts of Blood Magic. (First person to react to this message with 👍 within 30 seconds gets the Quest)"
-        ); //send it to whatever channel the bot has permissions to send on
-        console.log("sent message red priestess quest to accept");
+    // setInterval(function () {
+    //   melisandreexist = 0;
+    //   guild.members.cache.each((membs) => {
+    //     if (membs.roles.cache.has("713409866764517517")) {
+    //       //do nothing if melisandre found
+    //       melisandreexist = 1;
+    //       console.log("Melisandre exists on server");
+    //       return;
+    //     } else {
+    //       console.log("Melisandre DOES NOT exist on server");
+    //     }
+    //   });
+    //   console.log("RED PRIESTESS ALREADY EXISTS DO NOTHING");
+    //   if (melisandreexist == 0) {
+    //     channel_w.send(
+    //       "Pray to the Lord of Light to learn the powerful dark arts of Blood Magic. (First person to react to this message with 👍 within 30 seconds gets the Quest)"
+    //     ); //send it to whatever channel the bot has permissions to send on
+    //     console.log("sent message red priestess quest to accept");
 
-        //find those with ruby amulets and remove it
-        guild.members.cache.each((membs) => {
-          if (membs.roles.cache.has("739206804310982751")) {
-            membs.roles.remove("739206804310982751");
-          }
-        });
-      }
-    }, randpriestess * 1000);
+    //     //find those with ruby amulets and remove it
+    //     guild.members.cache.each((membs) => {
+    //       if (membs.roles.cache.has("739206804310982751")) {
+    //         membs.roles.remove("739206804310982751");
+    //       }
+    //     });
+    //   }
+    // }, randpriestess * 1000);
 
     //--------------------------------------------
     // LORD COMMANDER 1ST QUESTION
@@ -466,12 +758,90 @@ client.on("ready", () => {
     //--------------------------------------------
     // BEYOND WALL QUEST in NW CHANNEL - 1st question
     //--------------------------------------------
+    // setInterval(function () {
+    //   channel_quest_beyondNW.send(
+    //     "He who wants to become a Nights Watch Ranger, and go on Quests beyond the Wall, react to this message with 👍 within 5 minutes to get this Quest."
+    //   ); //send it to whatever channel the bot has permissions to send on
+    //   console.log("sent message beyond wall quest to accept");
+    // }, randBeyond * 1000);
+
+    //////////////////////////////////////////////////////////////////
+    ///////////RED PRIESTESS Embed///////////
+    //////////////////////////////////////////////////////////////////
     setInterval(function () {
-      channel_quest_beyondNW.send(
-        "He who wants to become a Nights Watch Ranger, and go on Quests beyond the Wall, react to this message with 👍 within 5 minutes to get this Quest."
-      ); //send it to whatever channel the bot has permissions to send on
-      console.log("sent message beyond wall quest to accept");
-    }, randBeyond * 1000);
+      guild.members.cache.each((membs) => {
+        if (membs.roles.cache.has("713409866764517517")) {
+          //do nothing if melisandre found
+          melisandreexist = 1;
+          console.log("Melisandre exists on server");
+          return;
+        } else {
+          console.log("Melisandre DOES NOT exist on server");
+        }
+      });
+      console.log("RED PRIESTESS ALREADY EXISTS DO NOTHING");
+      if (melisandreexist == 0) {
+        let embed = new Discord.MessageEmbed()
+          .setColor("RED")
+          .setAuthor(
+            "Pray to the Lord of Light to learn the powerful dark arts and become the Red Priestess."
+          )
+          .setDescription(
+            "Lead us from the darkness, O my Lord. Fill our hearts with fire, so we may walk your shining path. R'hllor, you are the light in our eyes, the fire in our hearts, the heat in our loins. Yours is the sun that warms our days, yours the stars that guard us in the dark of night.\n(First person to react to this message with 👍 within 30 seconds gets the Quest)"
+          )
+          .attachFiles(["./assets/lordoflight.png"])
+          .setImage("attachment://lordoflight.png");
+        channel_w.send(embed).then((m) => {
+          m.react("👍").then((r) => {
+            var membertest;
+            const reactFilter = (reaction, user) => {
+              reaction.emoji.name === "👍";
+              membertest = reaction.message.guild.member(user);
+              if (user == client.user) {
+              } else if (
+                membertest.roles.cache.has("713901799324778587") || //white walker
+                membertest.roles.cache.has("708346509367836702") ||
+                membertest.roles.cache.has("718167982106345592") ||
+                membertest.roles.cache.has("707074053881724989") ||
+                membertest.roles.cache.has("742098398169268304") //limbo
+              ) {
+                membertest.send(
+                  "Cannot be Dead/Limbo or Nights Watch to become the Red Priestess!"
+                );
+              } else if (
+                membertest.roles.cache.has("708021014977708033") || //king
+                membertest.roles.cache.has("707250754020180079") || //hand
+                membertest.roles.cache.has("712353382660309033") || //small council
+                membertest.roles.cache.has("735281180521398292") || //kingsguard
+                membertest.roles.cache.has("707069479833698326") || //lordlanni
+                membertest.roles.cache.has("707069333494431854") || //lordstark
+                membertest.roles.cache.has("707073800474198078") || //lordvale
+                membertest.roles.cache.has("707073467283144704") || //lordtyrell
+                membertest.roles.cache.has("707073882321846355") || //lordbara
+                membertest.roles.cache.has("707073997933772811") //lordtully
+              ) {
+                membertest.send("Cannot hold a position of power already.");
+              } else {
+                channel_w.send(
+                  membertest.user.username +
+                    " was the First to pray to R'hllor."
+                );
+                return ["👍"].includes(reaction.emoji.name);
+              }
+            };
+
+            m.awaitReactions(reactFilter, { max: 1 })
+              .then((collected) => {
+                let args = membertest;
+                client.quests
+                  .get("questredpriestess")
+                  .execute(channel_quest_lordoflight, args);
+              })
+              .catch(console.error);
+          });
+        });
+      }
+    }, randpriestess * 1000);
 
     //////////////////////////////////////////////////////////////////
     ///////////Merchant Quest Embed///////////
@@ -497,13 +867,21 @@ client.on("ready", () => {
               membertest.roles.cache.has("713901799324778587") ||
               membertest.roles.cache.has("708346509367836702") ||
               membertest.roles.cache.has("718167982106345592") ||
-              membertest.roles.cache.has("714598666857349132")
+              membertest.roles.cache.has("714598666857349132") ||
+              membertest.roles.cache.has("742098398169268304")
             ) {
               membertest.send(
-                "Cannot be Dead or in Essos to trade with the Wandering Merchant!"
+                "Cannot be Dead/Limbo or in Essos to trade with the Wandering Merchant!"
+              );
+            } else if (membertest.roles.cache.has("707074053881724989")) {
+              membertest.send(
+                "Nights Watch cannot partake in Westeros Quests."
               );
             } else {
-              channel_w.send(membertest.user.username + " was the First to enter the creepy Merchant Wagon.");
+              channel_w.send(
+                membertest.user.username +
+                  " was the First to enter the creepy Merchant Wagon."
+              );
               return ["👍"].includes(reaction.emoji.name);
             }
           };
@@ -544,15 +922,23 @@ client.on("ready", () => {
               membertest.roles.cache.has("713901799324778587") ||
               membertest.roles.cache.has("708346509367836702") ||
               membertest.roles.cache.has("718167982106345592") ||
-              membertest.roles.cache.has("714598666857349132")
+              membertest.roles.cache.has("714598666857349132") ||
+              membertest.roles.cache.has("742098398169268304")
             ) {
               membertest.send(
-                "Cannot be Dead or in Essos to get an Iron Coin!"
+                "Cannot be Dead/Limbo or in Essos to get an Iron Coin!"
+              );
+            } else if (membertest.roles.cache.has("707074053881724989")) {
+              membertest.send(
+                "Nights Watch cannot partake in Westeros Quests."
               );
             } else if (membertest.roles.cache.has("726588449263583339")) {
               membertest.send("Already have an Iron Coin!");
             } else {
-              channel_w.send(membertest.user.username + " was the First to answer Jaqen's call.");
+              channel_w.send(
+                membertest.user.username +
+                  " was the First to answer Jaqen's call."
+              );
               return ["👍"].includes(reaction.emoji.name);
             }
           };
@@ -593,15 +979,23 @@ client.on("ready", () => {
               membertest.roles.cache.has("713901799324778587") ||
               membertest.roles.cache.has("708346509367836702") ||
               membertest.roles.cache.has("718167982106345592") ||
-              membertest.roles.cache.has("714598666857349132")
+              membertest.roles.cache.has("714598666857349132") ||
+              membertest.roles.cache.has("742098398169268304")
             ) {
               membertest.send(
-                "Cannot be Dead or in Essos to get a Valyrian Dagger!"
+                "Cannot be Dead/Limbo or in Essos to get a Valyrian Dagger!"
+              );
+            } else if (membertest.roles.cache.has("707074053881724989")) {
+              membertest.send(
+                "Nights Watch cannot partake in Westeros Quests."
               );
             } else if (membertest.roles.cache.has("719083010091253770")) {
               membertest.send("Already have Valyrian Dagger!");
             } else {
-              channel_w.send(membertest.user.username + " was the First to accepted the Valyrian Dagger Quest.");
+              channel_w.send(
+                membertest.user.username +
+                  " was the First to accepted the Valyrian Dagger Quest."
+              );
               return ["👍"].includes(reaction.emoji.name);
             }
           };
@@ -615,6 +1009,56 @@ client.on("ready", () => {
         });
       });
     }, randdagger * 1000);
+
+    //////////////////////////////////////////////////////////////////
+    ///////////Nights Watch Quest Embed///////////
+    //////////////////////////////////////////////////////////////////
+    setInterval(function () {
+      let embed = new Discord.MessageEmbed()
+        .setColor("BLACK")
+        .setAuthor("The Gate to go Beyond the Wall is open.")
+        .setDescription(
+          "Hurry through if you want to go out Beyond the Wall and gain powerful items, coins and rank.\nJust click on the 👍 below. (Only 1 person to react gets Quest)"
+        )
+        .attachFiles(["./assets/gate.png"])
+        .setImage("attachment://gate.png");
+      channel_quest_beyondNW.send(embed).then((m) => {
+        m.react("👍").then((r) => {
+          var membertest;
+          const reactFilter = (reaction, user) => {
+            reaction.emoji.name === "👍";
+            membertest = reaction.message.guild.member(user);
+            if (user == client.user) {
+              // console.log("ignore bot reaction");
+            } else if (membertest.roles.cache.has("727677376191791105")) {
+              membertest.send("Already beyond the wall!");
+            } else {
+              channel_quest_beyondNW.send(
+                membertest.user.username +
+                  " was the First to head out Beyond the Wall. He is Brave!"
+              );
+              return ["👍"].includes(reaction.emoji.name);
+            }
+          };
+
+          m.awaitReactions(reactFilter, { max: 1 })
+            .then((collected) => {
+              let args = membertest;
+              client.quests
+                .get("quest_beyond_start")
+                .execute(
+                  channel_w,
+                  channel_quest_beyondNW,
+                  channel_quest_start1,
+                  channel_quest_start2,
+                  channel_quest_start3,
+                  args
+                );
+            })
+            .catch(console.error);
+        });
+      });
+    }, randBeyond * 1000); //
   });
 });
 //-------------------------------------------------------------------------
@@ -657,6 +1101,39 @@ client.on("message", (message) => {
     case "test":
       client.commands.get("test").execute(message, args);
       break;
+    case "toptimeouts":
+      client.commands.get("toptimeouts").execute(message, args);
+      break;
+    case "pets":
+      client.commands.get("pets").execute(message, args);
+      break;
+    case "leaders":
+      client.commands.get("leaders").execute(message, args);
+      break;
+    case "flame":
+      client.commands.get("flame").execute(message, args);
+      break;
+    case "give_flame":
+      client.commands.get("give_flame").execute(message, args);
+      break;
+    case "promote":
+      client.commands.get("promote").execute(message, args);
+      break;
+    // case "promote_lannister":
+    //   client.commands.get("promote_lannister").execute(message, args);
+    //   break;
+    // case "promote_baratheon":
+    //   client.commands.get("promote_baratheon").execute(message, args);
+    //   break;
+    // case "promote_tyrell":
+    //   client.commands.get("promote_tyrell").execute(message, args);
+    //   break;
+    // case "promote_vale":
+    //   client.commands.get("promote_vale").execute(message, args);
+    //   break;
+    // case "promote_stark":
+    //   client.commands.get("promote_stark").execute(message, args);
+    //   break;
     case "deserters":
       client.commands.get("deserters").execute(message, args);
       break;
@@ -699,15 +1176,15 @@ client.on("message", (message) => {
     case "buy_wolf":
       client.commands.get("buy_wolf").execute(message, args);
       break;
-    case "pet_shadowcat":
-      client.commands.get("pet_shadowcat").execute(message, args);
-      break;
-    case "pet_wolfghost":
-      client.commands.get("pet_wolfghost").execute(message, args);
-      break;
-    case "pet_wolf":
-      client.commands.get("pet_wolf").execute(message, args);
-      break;
+    // case "pet_shadowcat":
+    //   client.commands.get("pet_shadowcat").execute(message, args);
+    //   break;
+    // case "pet_wolfghost":
+    //   client.commands.get("pet_wolfghost").execute(message, args);
+    //   break;
+    // case "pet_wolf":
+    //   client.commands.get("pet_wolf").execute(message, args);
+    //   break;
     case "inventory":
       client.commands.get("inventory").execute(message, args);
       break;
@@ -905,22 +1382,66 @@ client.on("guildMemberUpdate", function (oldMember, newMember) {
     return "Channel does not exist!";
     console.log("---------channel not found");
   }
+  //-------------------------------------------------------------------------
+  // remove lord and weapon on switching house for each house
+  //-------------------------------------------------------------------------
+  //lord lannister
+  if (
+    oldMember.roles.cache.has("742482004557299714") &&
+    !newMember.roles.cache.has("707069479833698326")
+  ) {
+    newMember.roles.remove("742482004557299714"); //lord title
+    newMember.roles.remove("742497869126434927"); //weapon
+  }
+  //lord baratheon
+  if (
+    oldMember.roles.cache.has("742482806118285323") &&
+    !newMember.roles.cache.has("707073882321846355")
+  ) {
+    newMember.roles.remove("742482806118285323"); //lord title
+    newMember.roles.remove("742496368572235776"); //weapon
+  }
+  //lord tyrell
+  if (
+    oldMember.roles.cache.has("742482492606513183") &&
+    !newMember.roles.cache.has("707073467283144704")
+  ) {
+    newMember.roles.remove("742482492606513183"); //lord title
+    newMember.roles.remove("742494956895076564"); //weapon
+  }
+  //lord vale
+  if (
+    oldMember.roles.cache.has("742482606658158624") &&
+    !newMember.roles.cache.has("707073800474198078")
+  ) {
+    newMember.roles.remove("742482606658158624"); //lord title
+    newMember.roles.remove("742496809108373515"); //weapon
+  }
+  //lord stark
+  if (
+    oldMember.roles.cache.has("742483411079397407") &&
+    !newMember.roles.cache.has("707069333494431854")
+  ) {
+    newMember.roles.remove("742483411079397407"); //lord title
+    newMember.roles.remove("742489354911350955"); //weapon
+  }
 
   //-------------------------------------------------------------------------
   // remove bannerless role when they join a house
   //-------------------------------------------------------------------------
   if (
-    oldMember.roles.cache.has("740747121707450401") && //has bannerless
-    (newMember.roles.cache.has("707069333494431854") || //stark
-    newMember.roles.cache.has("707069479833698326") || //lannister
-    newMember.roles.cache.has("707073920515309639") || //targaryen
-    newMember.roles.cache.has("707073997933772811") || //tully
-    newMember.roles.cache.has("707073467283144704") || //tyrell
-    newMember.roles.cache.has("708351845994725418") || //greyjoy
-    newMember.roles.cache.has("707073800474198078") || //arryn
-    newMember.roles.cache.has("707073882321846355") || //baratheon
-    newMember.roles.cache.has("707074053881724989") || //nightswatch
-      newMember.roles.cache.has("714598666857349132")) //essos
+    oldMember.roles.cache.has("740747121707450401") || //has bannerless OR
+    (oldMember.roles.cache.has("742098398169268304") && //has limbo AND
+      (newMember.roles.cache.has("707069333494431854") || //stark
+      newMember.roles.cache.has("707069479833698326") || //lannister
+      newMember.roles.cache.has("707073920515309639") || //targaryen
+      newMember.roles.cache.has("707073997933772811") || //tully
+      newMember.roles.cache.has("707073467283144704") || //tyrell
+      newMember.roles.cache.has("708351845994725418") || //greyjoy
+      newMember.roles.cache.has("707073800474198078") || //arryn
+      newMember.roles.cache.has("707073882321846355") || //baratheon
+      newMember.roles.cache.has("707074053881724989") || //nightswatch
+        newMember.roles.cache.has("714598666857349132"))) //essos
   ) {
     //bannerless
     newMember.roles.remove("740747121707450401"); //newcomer
@@ -929,33 +1450,35 @@ client.on("guildMemberUpdate", function (oldMember, newMember) {
   //-------------------------------------------------------------------------
   // add hidden roles
   //-------------------------------------------------------------------------
-  if (
-    !newMember.roles.cache.has("736382370592325643") &&
-    !newMember.roles.cache.has("740747121707450401") &&
-    !newMember.roles.cache.has("741497047638736940") &&
-    !newMember.roles.cache.has("742098398169268304")
-  ) {
-    //not have weapons && not have bannerless or limbo
-    newMember.roles.add("736382370592325643");
-  }
-  if (
-    !newMember.roles.cache.has("737819480935366687") &&
-    !newMember.roles.cache.has("740747121707450401") &&
-    !newMember.roles.cache.has("741497047638736940") &&
-    !newMember.roles.cache.has("742098398169268304")
-  ) {
-    //not pets && not have bannerless or limbo
-    newMember.roles.add("737819480935366687");
-  }
-  if (
-    !newMember.roles.cache.has("738598180509450302") &&
-    !newMember.roles.cache.has("740747121707450401") &&
-    !newMember.roles.cache.has("741497047638736940") &&
-    !newMember.roles.cache.has("742098398169268304")
-  ) {
-    //not quest items && not have bannerless or limbo
-    newMember.roles.add("738598180509450302");
-  }
+  setTimeout(() => {
+    if (
+      (!newMember.roles.cache.has("736382370592325643") &&
+        !newMember.roles.cache.has("740747121707450401")) ||
+      !newMember.roles.cache.has("741497047638736940") ||
+      !newMember.roles.cache.has("742098398169268304")
+    ) {
+      //not have weapons && not have bannerless or limbo
+      newMember.roles.add("736382370592325643");
+    }
+    if (
+      !newMember.roles.cache.has("737819480935366687") &&
+      !newMember.roles.cache.has("740747121707450401") &&
+      !newMember.roles.cache.has("741497047638736940") &&
+      !newMember.roles.cache.has("742098398169268304")
+    ) {
+      //not pets && not have bannerless or limbo
+      newMember.roles.add("737819480935366687");
+    }
+    if (
+      !newMember.roles.cache.has("738598180509450302") &&
+      !newMember.roles.cache.has("740747121707450401") &&
+      !newMember.roles.cache.has("741497047638736940") &&
+      !newMember.roles.cache.has("742098398169268304")
+    ) {
+      //not quest items && not have bannerless or limbo
+      newMember.roles.add("738598180509450302");
+    }
+  }, 15 * 1000);
 
   //-------------------------------------------------------------------------
   // When a User changes their role, announce it
@@ -1323,7 +1846,6 @@ client.on("message", (receivedMessage) => {
       .execute(receivedMessage, args);
   }
   //after passing group of wights
-  //**After kill the group of Wights you head past a Valley. There you run into a large gathering of Freefolk. One of them is huge with a Red Beard. He appears to hate Crows.**\n React with 1️⃣ to give your Chainmail Armour and Dragonglass as a gift against the White Walkers\n React with 2️⃣ to run back to Castle Black instead and report the gathering
   if (
     receivedMessage.author == client.user &&
     receivedMessage.content ==
@@ -1354,14 +1876,14 @@ client.on("message", (receivedMessage) => {
   //   client.quests.get("quest_test1").execute(receivedMessage, args);
   // }
   //QUEST IRON COIN
-  if (
-    receivedMessage.author == client.user &&
-    receivedMessage.content ==
-      "Quest for Iron Coin. (First person to react to this message with 👍 within 30 seconds gets the Quest)"
-  ) {
-    let args = receivedMessage.content;
-    client.quests.get("quest_ironcoin").execute(receivedMessage, args);
-  }
+  // if (
+  //   receivedMessage.author == client.user &&
+  //   receivedMessage.content ==
+  //     "Quest for Iron Coin. (First person to react to this message with 👍 within 30 seconds gets the Quest)"
+  // ) {
+  //   let args = receivedMessage.content;
+  //   client.quests.get("quest_ironcoin").execute(receivedMessage, args);
+  // }
   //**Jaqen H'ghar**: Why do you seek a Man? A Man has duties be quick:\n React with 1️⃣ I want to kill people\n React with 2️⃣ I want to become a Faceless Man like you\n React with 3️⃣ I want to serve the Many Faced God of Death
   if (
     receivedMessage.author == client.user &&
@@ -1373,14 +1895,14 @@ client.on("message", (receivedMessage) => {
   }
   //Pray to the Lord of Light to learn the powerful dark arts of Blood Magic. (First person to react to this message with 👍 within 30 seconds gets the Quest)
   //QUEST RED PRIESTESS
-  if (
-    receivedMessage.author == client.user &&
-    receivedMessage.content ==
-      "Pray to the Lord of Light to learn the powerful dark arts of Blood Magic. (First person to react to this message with 👍 within 30 seconds gets the Quest)"
-  ) {
-    let args = receivedMessage.content;
-    client.quests.get("quest_redpriestess").execute(receivedMessage, args);
-  }
+  // if (
+  //   receivedMessage.author == client.user &&
+  //   receivedMessage.content ==
+  //     "Pray to the Lord of Light to learn the powerful dark arts of Blood Magic. (First person to react to this message with 👍 within 30 seconds gets the Quest)"
+  // ) {
+  //   let args = receivedMessage.content;
+  //   client.quests.get("quest_redpriestess").execute(receivedMessage, args);
+  // }
   //Light your flame among us, R'hllor. Show us the truth or falseness of this man. Strike him down if he is guilty, and give strength to his sword if he is true. Lord of Light, give us wisdom.:\n React with 1️⃣ Lord of Light, defend us\n React with 2️⃣ Lord of Light, shine your face upon us\n React with 3️⃣ For the night is dark and full of terrors
   if (
     receivedMessage.author == client.user &&
@@ -1643,9 +2165,6 @@ client.on("message", (receivedMessage) => {
         let membersWithRole = guild.roles.cache.get(roleID).members;
         let roleName = role.name;
         let roleSize = membersWithRole.size;
-        // console.log(
-        //   "TESTING AUTO ROLE LOOP rolename " + roleName + " Count " + roleSize
-        // );
 
         if (
           roleName == "House Lannister" ||
@@ -1757,20 +2276,17 @@ client.on("message", (receivedMessage) => {
     });
     console.log("is there " + isthereNightKingofWesteros);
     ////// WARNING TO ALL THAT WHITE WALKERS ARE AT THE WALL
-    if (
-      whitewalkercount == nightwatchcount &&
-      isthereNightKingofWesteros == 0
-    ) {
+    if (whitewalkercount > nightwatchcount && isthereNightKingofWesteros == 0) {
       const embedwarning = new Discord.MessageEmbed()
         .setColor("#000000")
         .setTitle(
           "The White Walkers are at the Wall and ready to break through. The Realm needs more men at the Nights Watch before its too late!"
         )
         .setDescription(
-          "When White Walkers are more than Nights Watch, they break in and the Night King is risen. The King must send his men to the wall to battle the White Walkers with Dragon Glass. It is up to the living to hold the dead back."
+          "When White Walkers are more than Nights Watch x 2 Count, they break in and the Night King is risen. The King must send his men to the wall to battle the White Walkers with Dragon Glass. It is up to the living to hold the dead back."
         )
         .attachFiles("./assets/wightsatwall.png")
-        .setThumbnail("attachment://wightsatwall.png");
+        .setImage("attachment://wightsatwall.png");
       client.channels.cache.get("707102776215208008").send(embedwarning);
     }
     ////// WARNING TO ALL THAT NIGHTS WATCH NEEDS 1 MORE
@@ -1792,7 +2308,7 @@ client.on("message", (receivedMessage) => {
     }
     ////// IF WHITE WALKERS TOP HOUSE, NIGHTWATCH COUNT LESS THAN WHITE WALKERS, AND NO EXISTING NIGHT KING OF WESTEROS(ONCE THERE IS, NO NEED TO GO IN AGAIN)
     if (
-      whitewalkercount > nightwatchcount &&
+      whitewalkercount > nightwatchcount + nightwatchcount &&
       isthereNightKingofWesteros == 0
       // rolenames[index] == "White Walkers" &&
       // isthereNightKingofWesteros == 0
@@ -1910,10 +2426,9 @@ client.on("message", (receivedMessage) => {
       do {
         newnightkingofwesteros = guildnightking.members.cache.random();
         if (
-          newnightkingofwesteros.presence.status !== "offline" &&
           newnightkingofwesteros.roles.cache.has("713901799324778587") //white walker
         ) {
-          console.log("TEST I FOUND White Walker NOT OFFLINE");
+          console.log("TEST I FOUND White Walker");
           loopcontrolnightking++;
         }
       } while (loopcontrolnightking !== 1);
@@ -1924,8 +2439,8 @@ client.on("message", (receivedMessage) => {
             newnightkingofwesteros.user.username
         );
         newnightkingofwesteros.roles
-          .add("716878672820306003")
-          .catch(console.error); // ADD NIGHT KING OF WESTEROS ROLE
+          .add("713895055252783175")
+          .catch(console.error); // ADD NIGHT KING ROLE
         // send message to channel that night king now rules westeros as the King of Death
         const embed = new Discord.MessageEmbed()
           .setColor("#0099ff")
@@ -1935,13 +2450,13 @@ client.on("message", (receivedMessage) => {
               " has taken over Westeros!"
           )
           .setDescription(
-            "The King of Westeros lost his power. The only way to stop the Night King is to join the NightsWatch and get as many banners as White Walkers! Join the Nights Watch or the Night King will rule forever! Join here: #join-a-house"
+            "The King of Westeros lost his power. The only way to stop the Night King is to join the NightsWatch and get more banners then White Walkers! Join the Nights Watch or the Night King will rule forever! Join here: #join-a-house"
           )
           .addField("Bonus:", `Night King received ${kingcoins} coins`)
           .attachFiles("./assets/nightking2.png")
           .setThumbnail("attachment://nightking2.png")
-          .attachFiles(["./assets/winterishere.png"])
-          .setImage("attachment://winterishere.png");
+          .attachFiles(["./assets/nightkingtakeover.png"])
+          .setImage("attachment://nightkingtakeover.png");
         //give new night king coins for takeover
         Money.findOne(
           {
@@ -2049,6 +2564,7 @@ client.on("message", (receivedMessage) => {
           "whites " +
           whitewalkercount
       );
+      var nightkingdefeated = 1;
 
       //-------------------------------------------------
       // loop through and find all white walker members then remove their roles
@@ -2057,10 +2573,8 @@ client.on("message", (receivedMessage) => {
         guild.members.cache.each((membs) => {
           if (membs.roles.cache.has("713901799324778587")) {
             //white walkers
-            membs.roles.cache.forEach((role) => {
-                console.log("MEMBS REMOVED white walkers " + role.name);
-                membs.roles.remove(role).catch(console.error); // REMOVE WHITE WALKER ROLE
-            });
+            membs.roles.remove("713901799324778587").catch(console.error); // REMOVE WHITE WALKER ROLE
+            membs.roles.add("742098398169268304").catch(console.error); // add limbo
           }
         });
       });
@@ -2080,9 +2594,8 @@ client.on("message", (receivedMessage) => {
         guild.members.cache.each((membs) => {
           if (membs.roles.cache.has("713895055252783175")) {
             //night king
-            console.log("MEMBS REMOVED night king " + membs.user.username);
-            membs.roles.remove("716878672820306003").catch(console.error); // REMOVE NIGHT KING OF WESTEROS ROLE
             membs.roles.remove("713895055252783175").catch(console.error); // REMOVE NIGHT KING ROLE
+            membs.roles.add("742098398169268304").catch(console.error); // add limbo
           }
         });
       });
@@ -2094,22 +2607,8 @@ client.on("message", (receivedMessage) => {
         guild.members.cache.each((membs) => {
           if (membs.roles.cache.has("720335392653443163")) {
             //general
-            console.log("MEMBS REMOVED night king " + membs.user.username);
             membs.roles.remove("720335392653443163").catch(console.error); // REMOVE GENERAL ROLE
-          }
-        });
-      });
-
-      //-------------------------------------------------
-      // loop through and find all Deserters and remove that role
-      //-------------------------------------------------
-      client.guilds.cache.each((guild) => {
-        guild.members.cache.each((membs) => {
-          if (
-            membs.roles.cache.has("715781455560573001") //deserters
-          ) {
-            console.log("MEMBS REMOVED deserter role " + membs.user.username);
-            membs.roles.remove("715781455560573001").catch(console.error); // REMOVE DESERTER ROLE
+            membs.roles.add("742098398169268304").catch(console.error); // add limbo
           }
         });
       });
@@ -2139,16 +2638,30 @@ client.on("message", (receivedMessage) => {
           "The NightsWatch has pushed the Night King back beyond the Wall due to their numbers!"
         )
         .setDescription(
-          "Anyone that was a White Walker has been set free to join a House. Anyone that fought at the wall is set free to rejoin the NightsWatch or Join a House."
+          "Anyone that was a White Walker has been set free to join a House. Westeros must rebuild the great Houses."
         )
-        .attachFiles("./assets/nights_watch.png")
-        .setThumbnail("attachment://nights_watch.png");
+        .attachFiles("./assets/nightkingdefeated.png")
+        .setImage("attachment://nightkingdefeated.png");
 
       //TEST ADMIN CHANNEL
       // client.channels.cache.get("707102776215208008").send(embed);
       //WHISPERS IN WESTEROS CHANNEL
       client.channels.cache.get("707102776215208008").send(embed);
       // console.log("entered Night king pushed back embed AUTO");
+
+      //-------------------------------------------------
+      // loop through and find all Deserters and remove that role
+      //-------------------------------------------------
+      client.guilds.cache.each((guild) => {
+        guild.members.cache.each((membs) => {
+          if (
+            membs.roles.cache.has("715781455560573001") //deserters
+          ) {
+            console.log("MEMBS REMOVED deserter role " + membs.user.username);
+            membs.roles.remove("715781455560573001").catch(console.error); // REMOVE DESERTER ROLE
+          }
+        });
+      });
 
       //-------------------------------------------------
       //APPOINT NEW RANDOM KING from the STRONGEST HOUSE - NIGHT KING PROCESS / DEFEATED - NEED TO FIX!!!
@@ -2235,7 +2748,7 @@ client.on("message", (receivedMessage) => {
       console.log("------------------------ENTERED NEW STRONGEST CHECK");
       //markerstrong
       const embed = new Discord.MessageEmbed()
-        .setColor("#0099ff")
+        .setColor("GOLD")
         .setTitle(
           `${rolenames[index]}` + " Is The New Strongest House of Westeros!"
         )
@@ -2757,10 +3270,10 @@ client.on("message", (receivedMessage) => {
           name: "Special Role Commands",
           value: "`^rolehelp`",
         },
-        {
-          name: "See All Role Commands",
-          value: "`^rolehelpall`",
-        },
+        // {
+        //   name: "See All Role Commands",
+        //   value: "`^rolehelpall`",
+        // },
         {
           name: "Combat Commands",
           value: "`^combathelp`",
@@ -2768,6 +3281,10 @@ client.on("message", (receivedMessage) => {
         {
           name: "Show Your Stats",
           value: "`^flex`",
+        },
+        {
+          name: "Show Your Pets",
+          value: "`^pets`",
         }
       );
     receivedMessage.channel.send(embed);
@@ -2781,7 +3298,7 @@ client.on("message", (receivedMessage) => {
     if (receivedMessage.member.roles.cache.has("713409866764517517")) {
       //red priestess
       const embedRed = new Discord.MessageEmbed()
-        .setColor("#0099ff")
+        .setColor("RED")
         .setTitle("Role Commands")
         .attachFiles(["./assets/redpriestess.png"])
         .setThumbnail("attachment://redpriestess.png")
@@ -2789,17 +3306,22 @@ client.on("message", (receivedMessage) => {
           {
             name:
               "A Red Priestess can revive a a member with: (Cooldown: 1 hour)",
-            value: "^revive @user",
+            value: "`^revive @user`",
           },
           {
             name:
               "A Red Priestess can kill with a Shadow: (Cooldown: 1 hour)\nShadows can kill anyone **except** King, Hand, Lord Commander, First Rangers, and White Walkers",
-            value: "^shadow @user",
+            value: "`^shadow @user`",
           },
           {
             name:
-              "A Red Priestess can gift up to 2 Amulets while Priestess.\nAmulets can be given only once and not taken back. They give the member free revives using ^amulet. Each time they use ^amulet, you will gain 2XP in Bloodmagic which you can view using the ^flex command.",
-            value: "^give_amulet @user",
+              "Gift up to 2 Amulets while Priestess.\nAmulets can be given only once. Amulets allow free revives using ^amulet. With each use you will gain 2XP in Bloodmagic which you can view using the ^flex command.",
+            value: "`^give_amulet @user`",
+          },
+          {
+            name:
+              "For each 6xp Bloodmagic earned through Amulet uses, you can give 1 Flaming Sword to a member.\nUse the ^give_flame @user command to give the member a Flaming Sword. It gives them +50 points for Duels and ability to Kill White Walkers for 30 coins a kill",
+            value: "`^give_flame @user`",
           }
         );
       receivedMessage.channel.send(embedRed);
@@ -2807,41 +3329,45 @@ client.on("message", (receivedMessage) => {
     } else if (receivedMessage.member.roles.cache.has("708021014977708033")) {
       //king
       const embedKing = new Discord.MessageEmbed()
-        .setColor("#0099ff")
+        .setColor("GOLD")
         .setTitle("Role Commands")
         .attachFiles(["./assets/ironthrone.png"])
         .setThumbnail("attachment://ironthrone.png")
         .addFields(
           {
             name: "King can ADD or REMOVE members to the Small Council with:",
-            value: "^add_small @user or ^remove_small @user",
+            value: "`^add_small @user or ^remove_small @user`",
           },
           {
             name: "King can ADD or REMOVE a Hand of the King with:",
-            value: "^add_hand @user or ^remove_hand @user",
+            value: "`^add_hand @user or ^remove_hand @user`",
           },
           {
             name: "King can ADD or REMOVE a up to Two Kingsguard with:",
-            value: "^add_guard @user or ^remove_guard @user",
+            value: "`^add_guard @user or ^remove_guard @user`",
+          },
+          {
+            name: "King can promote a House Member to Lord Status:",
+            value: "`^promote @user`",
           },
           {
             name: "King OR Hand can send members to Castle Black:",
-            value: "^wall @user",
+            value: "`^wall @user`",
           },
           {
             name:
-              "King or Hand can execute a member with: (Cooldown: 12 hours)",
-            value: "^execute @user",
+              "King or Hand can execute a member with: (Cooldown: 24 hours)",
+            value: "`^execute @user`",
           },
-          {
-            name:
-              "King or Hand can send a member to the Black Cell with: (1 hour cooldown with max capacity 2 at a time)",
-            value: "^jail @user",
-          },
+          // {
+          //   name:
+          //     "King or Hand can send a member to the Black Cell with: (6 hour cooldown with max capacity 2 at a time)",
+          //   value: "`^jail @user`",
+          // },
           {
             name:
               "King or Hand can set a member free from the Black Cell with:",
-            value: "^free @user",
+            value: "`^free @user`",
           }
         );
       receivedMessage.channel.send(embedKing);
@@ -2849,27 +3375,27 @@ client.on("message", (receivedMessage) => {
     } else if (receivedMessage.member.roles.cache.has("707250754020180079")) {
       //hand
       const embedHand = new Discord.MessageEmbed()
-        .setColor("#0099ff")
+        .setColor("GOLD")
         .setTitle("Role Commands")
         .attachFiles(["./assets/hand.png"])
         .setThumbnail("attachment://hand.png")
         .addFields(
           {
             name: "Hand can send members to Castle Black:",
-            value: "^wall @user",
+            value: "`^wall @user`",
           },
           {
-            name: "Hand can execute a member with: (Cooldown: 12 hours)",
-            value: "^execute @user",
+            name: "Hand can execute a member with: (Cooldown: 24 hours)",
+            value: "`^execute @user`",
           },
-          {
-            name:
-              "Hand can send a member to the Black Cell with: (1 hour cooldown with max capacity 2 at a time)",
-            value: "^jail @user",
-          },
+          // {
+          //   name:
+          //     "Hand can send a member to the Black Cell with: (6 hour cooldown with max capacity 2 at a time)",
+          //   value: "`^jail @user`",
+          // },
           {
             name: "Hand can set a member free from the Black Cell with:",
-            value: "^free @user",
+            value: "`^free @user`",
           }
         );
       receivedMessage.channel.send(embedHand);
@@ -2877,29 +3403,29 @@ client.on("message", (receivedMessage) => {
     } else if (receivedMessage.member.roles.cache.has("715783930581876806")) {
       //lord commander
       const embedLord = new Discord.MessageEmbed()
-        .setColor("#0099ff")
+        .setColor("GREY")
         .setTitle("Role Commands")
         .attachFiles(["./assets/lordcommander.png"])
         .setThumbnail("attachment://lordcommander.png")
         .addFields(
           {
             name: "Lord Commander of the NightsWatch can list Deserters:",
-            value: "^deserters",
+            value: "`^deserters`",
           },
           {
             name:
               "Lord Commander of the NightsWatch can sentence Deserters to Death:",
-            value: "^sentence @user",
+            value: "`^sentence @user`",
           },
           {
             name:
               "Lord Commander of the NightsWatch can Pardon so you leave the Nights Watch without become a Deserter:",
-            value: "^pardon @user",
+            value: "`^pardon @user`",
           },
           {
             name:
               "Lord Commander of the NightsWatch can Grant you permission Beyond the Wall for Quests:",
-            value: "^give_pass @user",
+            value: "`^give_pass @user`",
           }
         );
       receivedMessage.channel.send(embedLord);
@@ -2914,21 +3440,21 @@ client.on("message", (receivedMessage) => {
         .addFields(
           {
             name: "NIGHT KING can rise the dead with: (Cooldown: 1 hour)",
-            value: "^rise @user",
+            value: "`^rise @user`",
           },
           {
             name:
               "NIGHT KING can turn members with an Ice Spear: (Cooldown: 12 hours)",
-            value: "^spear @user",
+            value: "`^spear @user`",
           },
           {
             name: "NIGHT KING can select a General of the White Walkers:",
-            value: "^add_general @user",
+            value: "`^add_general @user`",
           },
           {
             name:
               "White Walkers can bite Nights Watchmen (not rangers or lord commander) with: (Cooldown: 6 hours)",
-            value: "^bite @user",
+            value: "`^bite @user`",
           }
         );
       receivedMessage.channel.send(embedNK);
@@ -2944,43 +3470,78 @@ client.on("message", (receivedMessage) => {
           {
             name:
               "GENERAL can turn members with an Ice Spear: (Cooldown: 12 hours)",
-            value: "^spear @user",
+            value: "`^spear @user`",
           },
           {
             name:
               "White Walkers can bite Nights Watchmen (not rangers or lord commander) with: (Cooldown: 6 hours)",
-            value: "^bite @user",
+            value: "`^bite @user`",
           }
         );
       receivedMessage.channel.send(embedGen);
       console.log("entered general role help menu");
     } else if (receivedMessage.member.roles.cache.has("735281180521398292")) {
-      //kingsguard general
-      const embedGen = new Discord.MessageEmbed()
-        .setColor("#0099ff")
+      //kingsguard
+      const embedkingsguard = new Discord.MessageEmbed()
+        .setColor("WHITE")
         .setTitle("Role Commands")
         .attachFiles(["./assets/whitecloak.png"])
         .setThumbnail("attachment://whitecloak.png")
         .addFields({
           name:
-            "Kingsguard (White Cloak) can send a member to the Black Cell with: (1 hour cooldown with max capacity 2 at a time)",
-          value: "^jail @user",
+            "Kingsguard (White Cloak) can send a member to the Black Cell with: (6 hour cooldown with max capacity 2 at a time)",
+          value: "`^jail @user`",
         });
-      receivedMessage.channel.send(embedGen);
+      receivedMessage.channel.send(embedkingsguard);
+      console.log("entered kingsguard help menu");
+    } else if (receivedMessage.member.roles.cache.has("713901799324778587")) {
+      //white walker
+      const embedkingsguard = new Discord.MessageEmbed()
+        .setColor("WHITE")
+        .setTitle("Role Commands")
+        .attachFiles(["./assets/turnedwight.png"])
+        .setThumbnail("attachment://turnedwight.png")
+        .addFields({
+          name:
+            "White Walkers can Bite the Nights Watch and possibly turn them.\nBeware, if they have a Dagger they might survive your bite 1/2 chance.\nIf they have Dragonglass, they will survive 2/3 times: (1 hour cooldown)",
+          value: "`^bite @user`",
+        });
+      receivedMessage.channel.send(embedkingsguard);
       console.log("entered kingsguard help menu");
     } else if (receivedMessage.member.roles.cache.has("728750595904897106")) {
       //first ranger
-      const embedRed = new Discord.MessageEmbed()
-        .setColor("#0099ff")
-        .setTitle("Role Commands")
-        .attachFiles(["./assets/firstranger.png"])
-        .setThumbnail("attachment://firstranger.png")
-        .addFields({
-          name:
-            "A First Ranger can go Beyond the Wall anytime with: (You will begin at choosing the Path, but beware, you can still die on quests!)",
-          value: "^go_beyond",
-        });
-      receivedMessage.channel.send(embedRed);
+      const embedRang = new Discord.MessageEmbed();
+      embedRang.setColor("BLACK");
+      embedRang.setTitle("Role Commands");
+      embedRang.attachFiles(["./assets/firstranger.png"]);
+      embedRang.setThumbnail("attachment://firstranger.png");
+
+      // if (receivedMessage.member.roles.cache.has("729097440082526279")) {
+      //   //skinchange
+      //   embedRang.addField(
+      //     "Use Skinchange to prevent any kind of death (Except Trial By Combat and In Quests) for 1 hour while activated.",
+      //     "`^skinchange`"
+      //   );
+      // }
+      // if (receivedMessage.member.roles.cache.has("729097386982375435")) {
+      //   //greensight
+      //   embedRang.addField(
+      //     "Use Greensight within the Greesight Activating Channel to see ALL Channels for 30 mins while activated.",
+      //     "`^greensight`"
+      //   );
+      // }
+      // if (receivedMessage.member.roles.cache.has("729097195722244176")) {
+      //   //obsidian lance
+      //   embedRang.addField(
+      //     "Use your Obsidian Lance to kill White Walkers and loot 30 coins from them, with a 1 hour cooldown between uses.",
+      //     "`^lance`"
+      //   );
+      // }
+      embedRang.addField(
+        "A First Ranger can go Beyond the Wall anytime with: (You will begin at choosing the Path, but beware, you can still die on quests!)",
+        "`^go_beyond`"
+      );
+      receivedMessage.channel.send(embedRang);
       console.log("entered first ranger role help menu");
     } else {
       receivedMessage.channel.send(
@@ -2996,82 +3557,86 @@ client.on("message", (receivedMessage) => {
       .addFields(
         {
           name: "King can ADD or REMOVE members to the Small Council with:",
-          value: "^add_small @user or ^remove_small @user",
+          value: "`^add_small @user or ^remove_small @user`",
         },
         {
           name: "King can ADD or REMOVE a Hand of the King with:",
-          value: "^add_hand @user or ^remove_hand @user",
+          value: "`^add_hand @user or ^remove_hand @user`",
         },
         {
           name: "King can ADD or REMOVE a up to Two Kingsguard with:",
-          value: "^add_guard @user or ^remove_guard @user",
+          value: "`^add_guard @user or ^remove_guard @user`",
+        },
+        {
+          name: "King can promote a House Member to Lord Status:",
+          value: "`^promote @user`",
         },
         {
           name: "King OR Hand can send members to Castle Black:",
-          value: "^wall @user",
+          value: "`^wall @user`",
         },
         {
-          name: "King or Hand can execute a member with: (Cooldown: 12 hours)",
-          value: "^execute @user",
-        },
-        {
-          name:
-            "King or Hand can send a member to the Black Cell with: (1 hour cooldown with max capacity 2 at a time)",
-          value: "^jail @user",
+          name: "King or Hand can execute a member with: (Cooldown: 24 hours)",
+          value: "`^execute @user`",
         },
         {
           name: "King or Hand can set a member free from the Black Cell with:",
-          value: "^free @user",
+          value: "`^free @user`",
+        },
+        {
+          name:
+            "Kingsguard Only can send a member to the Black Cell with: (6 hour cooldown with max capacity 2 at a time)",
+          value: "`^jail @user`",
         },
         {
           name: "Small Council member can leave Small Council with:",
-          value: "^leave_small",
+          value: "`^leave_small`",
         },
         {
           name:
             "Lord Commander of the NightsWatch can sentence Deserters to Death:",
-          value: "^sentence @user",
+          value: "`^sentence @user`",
         },
         {
           name:
             "Lord Commander of the NightsWatch can Pardon so you leave the Nights Watch without become a Deserter:",
-          value: "^pardon @user",
+          value: "`^pardon @user`",
         },
         {
           name:
             "Lord Commander of the NightsWatch can Grant you permission Beyond the Wall for Quests:",
-          value: "^give_pass @user",
+          value: "`^give_pass @user`",
         },
         {
           name:
             "A Red Priestess can revive a a member with: (Cooldown: 1 hour)",
-          value: "^revive @user",
+          value: "`^revive @user`",
         },
         {
           name: "A Red Priestess can kill with a Shadow: (Cooldown: 1 hour)",
-          value: "^shadow @user",
+          value: "`^shadow @user`",
         },
         {
           name: "A Red Priestess can gift up to 2 Amulets while Priestess:",
-          value: "^give_amulet @user",
+          value: "`^give_amulet @user`",
         },
         {
           name: "NIGHT KING can rise the dead with: (Cooldown: 1 hour)",
-          value: "^rise @user",
+          value: "`^rise @user`",
         },
         {
           name:
             "NIGHT KING AND GENERAL can turn members with an Ice Spear: (Cooldown: 12 hours)",
-          value: "^spear @user",
+          value: "`^spear @user`",
         },
         {
           name: "NIGHT KING can select a General of the White Walkers:",
-          value: "^add_general @user",
+          value: "`^add_general @user`",
         },
         {
           name:
             "White Walkers can bite Nights Watchmen (not rangers or lord commander) with: (Cooldown: 6 hours)",
-          value: "^bite @user",
+          value: "`^bite @user`",
         }
       );
     receivedMessage.channel.send(embed);
@@ -3090,16 +3655,16 @@ client.on("message", (receivedMessage) => {
       .addFields(
         {
           name: "Use ^trade to see Merchant Inventory of Items to Buy and Sell",
-          value: "^trade",
+          value: "`^trade`",
         },
         {
           name:
             "Use ^blacksmith to see Weapons you can buy at the Blacksmith channel",
-          value: "^blacksmith",
+          value: "`^blacksmith`",
         },
         {
           name: "Buy a Revive for 50 Coins: (1 hour cooldown to buy again)",
-          value: "^buy_revive",
+          value: "`^buy_revive`",
         }
       );
     receivedMessage.channel.send(embed);
@@ -3118,32 +3683,32 @@ client.on("message", (receivedMessage) => {
       .addFields(
         {
           name: "Combat Detailed Info",
-          value: "^combatinfo",
+          value: "`^combatinfo`",
         },
         {
           name:
             "Give away your Valyrian Dagger to any member: (Helps White Walkers survive White Walker Bites at the Wall and Quests Beyond the Wall.",
-          value: "^give_dagger @user",
+          value: "`^give_dagger @user`",
         },
         {
           name:
             "Give away your Chainmail Armor to any member: (Helps Melee and Quests)",
-          value: "^give_armor @user",
+          value: "`^give_armor @user`",
         },
         {
           name:
             "Give away your Dragonglass to any member: (Helps Nights Watch kill White Walkers)",
-          value: "^give_dragonglass @user",
+          value: "`^give_dragonglass @user`",
         },
         {
           name:
             "DEADLY: Challenge a member to Trial by Combat (Anyone can be killed that is living and not a Red Priestess - 30 coins for Winner, Death for Loser. You can also loot 20-50 coins randomly from the slain user.):",
-          value: "^trialbycombat @user",
+          value: "`^trialbycombat @user`",
         },
         {
           name:
             "FRIENDLY: Challenge a member to Duel (Must be within Combat Channel - 20 coins for Winner, 20 lost for Loser):",
-          value: "^duel @user",
+          value: "`^duel @user`",
         }
       );
     receivedMessage.channel.send(embed);
@@ -3162,13 +3727,13 @@ client.on("message", (receivedMessage) => {
       .addFields(
         {
           name: "Count members in a specific role:",
-          value: "^count-name (name = lannister, stark, etc)",
+          value: "`^count-name (name = lannister, stark, etc)`",
         },
-        { name: "List of All Houses and member count:", value: "^count" },
+        { name: "List of All Houses and member count:", value: "`^count`" },
         {
           name: "List Top Leaderboard of following items:",
           value:
-            "^topcoins, ^topxp, ^topquests, ^topkills, ^topdeaths, ^topwins, ^toploss, ^topescapes, ^topwightkills",
+            "`^topcoins, ^topxp, ^topquests, ^topkills, ^topdeaths, ^topwins, ^toploss, ^topescapes, ^topwightkills`",
         }
       );
     receivedMessage.channel.send(embed);
@@ -3185,10 +3750,10 @@ client.on("message", (receivedMessage) => {
       .attachFiles(["./assets/coinbag.png"])
       .setThumbnail("attachment://coinbag.png")
       .addFields(
-        { name: "List the # of Coins you have:", value: "^coins" },
+        { name: "List the # of Coins you have:", value: "`^coins`" },
         {
           name: "Transfer X Coins to any person mentioned:",
-          value: "^pay x @user",
+          value: "`^pay x @user`",
         }
       );
     receivedMessage.channel.send(embed);
@@ -3270,11 +3835,12 @@ client.on("message", (receivedMessage) => {
   }
 
   //-------------------------------------------------------------------------
-  // GET ALL ROLE MEMBER COUNTS - ^count-all
+  // GET ALL ROLE MEMBER COUNTS - ^count-all //markercount
   //-------------------------------------------------------------------------
   if (receivedMessage.content === "^count") {
     var countall_name = [];
     var countall_size = [];
+    var house_array = [];
     receivedMessage.guild.roles.cache.forEach((role) => {
       // console.log(role.name, role.id);
       let roleID = role.id;
@@ -3298,67 +3864,89 @@ client.on("message", (receivedMessage) => {
         roleName == "The Dead" ||
         roleName == "Deserter"
       ) {
+        house_array.push({
+          Name: roleName,
+          Size: roleSize,
+        });
         countall_name.push(roleName);
         countall_size.push(roleSize);
         console.log("Count All " + roleName + " size " + roleSize);
       }
     });
+    //house_array array of objects sorting test
+    function compare(a, b) {
+      const varA = a.Size;
+      const varB = b.Size;
+
+      let comparison = 0;
+      if (varA > varB) {
+        comparison = 1;
+      } else if (varA < varB) {
+        comparison = -1;
+      }
+      return comparison * -1;
+    }
+    console.log(house_array.sort(compare));
+    house_array.sort(compare);
     // console.log("countall " + countall_name[0]);
     const embed = new Discord.MessageEmbed()
       .setColor("#0099ff")
       .setTitle("List of all Houses + Other Roles")
       .attachFiles(["./assets/throne128.png"])
-      .setThumbnail("attachment://throne128.png")
-      .addFields(
-        {
-          name: "Name:",
-          value: countall_name[0] + " -Count: " + countall_size[0],
-        },
-        {
-          name: "Name:",
-          value: countall_name[1] + " -Count: " + countall_size[1],
-        },
-        {
-          name: "Name:",
-          value: countall_name[2] + " -Count: " + countall_size[2],
-        },
-        {
-          name: "Name:",
-          value: countall_name[3] + " -Count: " + countall_size[3],
-        },
-        {
-          name: "Name:",
-          value: countall_name[4] + " -Count: " + countall_size[4],
-        },
-        {
-          name: "Name:",
-          value: countall_name[5] + " -Count: " + countall_size[5],
-        },
-        {
-          name: "Name:",
-          value: countall_name[6] + " -Count: " + countall_size[6],
-        },
-        {
-          name: "Name:",
-          value: countall_name[7] + " -Count: " + countall_size[7],
-        },
-        {
-          name: "Name:",
-          value: countall_name[8] + " -Count: " + countall_size[8],
-        },
-        {
-          name: "Name:",
-          value: countall_name[9] + " -Count: " + countall_size[9],
-        },
-        {
-          name: "Name:",
-          value: countall_name[10] + " -Count: " + countall_size[10],
-        },
-        {
-          name: "Name:",
-          value: countall_name[11] + " -Count: " + countall_size[11],
-        }
-      );
+      .setThumbnail("attachment://throne128.png");
+    for (i = 0; i < house_array.length; i++) {
+      embed.addField(`${house_array[i].Name}`, `${house_array[i].Size}`);
+    }
+    // .addFields(
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[0] + " -Count: " + countall_size[0],
+    //   },
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[1] + " -Count: " + countall_size[1],
+    //   },
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[2] + " -Count: " + countall_size[2],
+    //   },
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[3] + " -Count: " + countall_size[3],
+    //   },
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[4] + " -Count: " + countall_size[4],
+    //   },
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[5] + " -Count: " + countall_size[5],
+    //   },
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[6] + " -Count: " + countall_size[6],
+    //   },
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[7] + " -Count: " + countall_size[7],
+    //   },
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[8] + " -Count: " + countall_size[8],
+    //   },
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[9] + " -Count: " + countall_size[9],
+    //   },
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[10] + " -Count: " + countall_size[10],
+    //   },
+    //   {
+    //     name: "Name:",
+    //     value: countall_name[11] + " -Count: " + countall_size[11],
+    //   }
+    // );
     receivedMessage.channel.send(embed);
   }
 
@@ -3581,4 +4169,8 @@ client.on("message", (receivedMessage) => {
     console.log("entered banner role call lannister");
   }
 });
+
+//-------------------------------------------------------------------------
+// SECRET BOT KEY
+//-------------------------------------------------------------------------
 

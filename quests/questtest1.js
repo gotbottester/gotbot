@@ -3,7 +3,7 @@
 const Money = require("../models/profile.js");
 const Discord = require("discord.js");
 const { collection } = require("../models/profile.js");
-const helper_functions = require("../helper_functions/rolesremover");
+const db = require("../helper_functions/db_functions");
 
 
 module.exports = {
@@ -14,6 +14,7 @@ module.exports = {
     console.log("entered quest_test1 command");
 
     var member;
+    var amount = 10;
     const filter = (reaction, user) => {
       member = reaction.message.guild.member(user);
       return ["1️⃣", "2️⃣", "3️⃣"].includes(reaction.emoji.name);
@@ -24,8 +25,7 @@ module.exports = {
       .then(async (collected) => {
         const reaction = collected.first();
         if (reaction.emoji.name === "1️⃣") {
-          await helper_functions.RolesRemover(member);
-          await helper_functions.givekill(member);
+          await db.givecoin(member, amount);
           message.reply(member.user.username + " reacted with 1️⃣");
           console.log("HELPER FINISHED");
           // message.delete({ timeout: 10000 });

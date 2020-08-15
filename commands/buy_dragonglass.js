@@ -42,7 +42,7 @@ module.exports = {
                 embed.setThumbnail("attachment://dragonglass.png");
                 embed.addField(
                   "Purpose: ",
-                  "Use ^dragonglass @user (Must be White Walker)"
+                  "Useful in Quests Beyond the Wall and for Nights Watch to help against being bit by White Walkers at the Wall. Gives you 2/3 chance of surviving a White Walker bite."
                 );
                 chan.send(embed);
               } else {

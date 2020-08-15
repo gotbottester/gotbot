@@ -14,7 +14,7 @@ module.exports = {
       .addFields(
         {
           name: "Type: Melee (FRIENDLY DUEL)",
-          value: "*Typing ^melee @user is a FRIENDLY way to duel another member. Roles are not lost.*\n***Requirements***: Must be in the combat channel, and living.\n***Rewards***:\nWinners gain both 20 coins and 2 Swordsman XP\nLosers lose both 20 coins and 1 Swordsman XP\n***Bonus points added to Chance***:\nValyrian Dagger + .10\nChainmail Armor + .20\nShield + .10\nLongsword + .20",
+          value: "*Typing ^melee @user is a FRIENDLY way to duel another member. Roles are not lost.*\n***Requirements***: Must be in the combat channel, and living.\n***Rewards***:\nWinners gain both 20 coins and 2 Swordsman XP\nLosers lose both 20 coins and 1 Swordsman XP\n***Bonus points added to Chance***:\nFlaming Sword + .50\nLord Special Weapons +.30\nBroadsword + .30\nValyrian Dagger + .10\nChainmail Armor + .20\nShield + .10\nLongsword + .20",
         },
         {
           name: "Type: Trial By Combat (DEADLY DUEL)",

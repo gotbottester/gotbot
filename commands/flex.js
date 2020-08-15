@@ -20,7 +20,8 @@ module.exports = {
           if (
             role != "733903953523376138" &&
             role != "736382370592325643" &&
-            role != "707028782522826782"
+            role != "707028782522826782" &&
+            role != "736430150454870024"
           ) {
             rolescount++;
           }
@@ -40,6 +41,8 @@ module.exports = {
           embed.addField("Total Kills: ", money.kills, true);
           embed.addField("Duel Wins: ", money.wins, true);
           embed.addField("Shadows left: ", money.shadowuse, true);
+          embed.addField("Amulets Used: ", money.amuletuse - 1, true);
+          embed.addField("Flaming Swords left: ", money.flamingsword, true);
           embed.addField("Blood Magic XP: ", money.bloodmagicxp, true);
           embed.addField("Days as Priestess: ", money.meliage, true);
           return message.channel.send(embed);

@@ -7,8 +7,8 @@ module.exports = {
     //blacksmith
     let embed = new Discord.MessageEmbed()
       .setTitle("Westeros Blacksmith Inventory")
+      .setDescription("The Blacksmith is where you can get weapons that will help you against Duels. You can also sell back your weapons if you are low on coins, but for a discounted price.")
       .setColor("BLACK")
-      .setTimestamp()
       .attachFiles(["./assets/blacksmith.png"])
       .setThumbnail("attachment://blacksmith.png")
       .addFields(

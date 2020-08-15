@@ -47,7 +47,7 @@ module.exports = {
         cooldownlance.add(message.author.id);
         //729891478565945436 protected by children of the forest role
         // member.roles.add("729891478565945436").catch(console.error);
-        member.roles.add("742098398169268304").catch(console.error); //add limbo
+        // member.roles.add("742098398169268304").catch(console.error); //add limbo
         member.send(
           "You have been killed by Obsidian Lance and set free from the Night King. Go choose a new House or join the Night's Watch if you please. <#707028783059697686>"
         );
@@ -57,7 +57,7 @@ module.exports = {
               " was killed and set free by Obsidian Lance. 30 Coins were looted from the White Walker."
           )
           .setDescription(
-            "30 Coin was looted from the White Walker. They are also now Protected by the Children of the Forest and cannot be speared or bitten while Night King exists."
+            "30 Coin was looted from the White Walker."
           )
           .setColor("BLACK")
           .setTimestamp()
@@ -72,7 +72,7 @@ module.exports = {
           },
           (err, money) => {
             if (err) console.log(err);
-            money.kills = money.kills + 1;
+            money.wightkills = money.wightkills + 1;
             money.coins = money.coins + 30;
             money.save().catch((err) => console.log(err));
           }
